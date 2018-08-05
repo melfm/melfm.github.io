@@ -38,6 +38,11 @@
         <!--<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
         <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
+		<link href="../../css/monokai-mel.css" rel="stylesheet" type="text/css">
+		<script src="../../js/rainbow-custom.min.js"></script>
+		<script src="../../js/language/generic.js"></script>
+		<script src="../../js/language/python.js"></script>
+
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -50,6 +55,7 @@
   ga('send', 'pageview');
 
 </script>
+
     </head>
 
     <body>
@@ -87,6 +93,112 @@
 
 </div>
 </br>
+
+
+<h2 id="weight-normalization">Weight Normalization in Deep Learning</h2>
+
+
+<h2 id="batch-norm">Batch Normalization</h2>
+<div style="width:11.8%; margin-left:auto; margin-right:auto; margin-bottom:5px; margin-top:17px;">
+<img src="img/batch_norm_forward.png" style="width:400px;height:300px;">
+</div>
+<div style="width:11.8%; margin-left:auto; margin-right:auto; margin-bottom:5px; margin-top:17px;">
+<img src="img/batch_norm_backward.png" style="width:500px;height:300px;">
+</div>
+
+<pre><code data-language="python">
+def batchnorm_forward(x, gamma, beta, bn_param):
+    """
+    Input:
+    - x: Data of shape (N, D)
+    - gamma: Scale parameter of shape (D,)
+    - beta: Shift paremeter of shape (D,)
+    - bn_param: Dictionary with the following keys:
+      - mode: 'train' or 'test'; required
+      - eps: Constant for numeric stability
+      - momentum: Constant for running mean / variance.
+      - running_mean: Array of shape (D,) giving running mean of features
+      - running_var Array of shape (D,) giving running variance of features
+    Returns a tuple of:
+    - out: of shape (N, D)
+    - cache: A tuple of values needed in the backward pass
+    """
+    mode = bn_param['mode']
+    eps = bn_param.get('eps', 1e-5)
+    momentum = bn_param.get('momentum', 0.9)
+
+    N, D = x.shape
+    running_mean = bn_param.get('running_mean', np.zeros(D, dtype=x.dtype))
+    running_var = bn_param.get('running_var', np.zeros(D, dtype=x.dtype))
+
+    out, cache = None, None
+    if mode == 'train':
+
+        sample_mean = np.mean(x, axis=0)
+        sample_var = np.var(x, axis=0)
+        vareps = sample_var + eps
+        x_normalized = (x - sample_mean) / np.sqrt(vareps)
+        out = gamma * x_normalized + beta
+
+        running_mean = momentum * running_mean + (1 - momentum) * sample_mean
+        running_var = momentum * running_var + (1 - momentum) * sample_var
+
+        cache = (x, gamma, sample_mean, vareps, x_normalized)
+
+    elif mode == 'test':
+        x_normalized = (x - running_mean) / np.sqrt(running_var + eps)
+        out = gamma * x_normalized + beta
+
+    else:
+        raise ValueError('Invalid forward batchnorm mode "%s"' % mode)
+
+    # Store the updated running means back into bn_param
+    bn_param['running_mean'] = running_mean
+    bn_param['running_var'] = running_var
+
+    return out, cache
+</code></pre>
+
+<pre><code data-language="python">
+def batchnorm_backward(dout, cache):
+
+    """
+    Inputs:
+    - dout: Upstream derivatives, of shape (N, D)
+    - cache: Variable of intermediates from batchnorm_forward.
+    Returns a tuple of:
+    - dx: Gradient with respect to inputs x, of shape (N, D)
+    - dgamma: Gradient with respect to scale parameter gamma, of shape (D,)
+    - dbeta: Gradient with respect to shift parameter beta, of shape (D,)
+    """
+
+    dx, dgamma, dbeta = None, None, None
+
+    x = cache[0]
+    N = x.shape[0]
+    gamma = cache[1]
+    sample_mean = cache[2]
+    vareps = cache[3]
+    x_normalized = cache[4]
+
+    x_mu = x - sample_mean
+    dx_norm = dout * gamma
+
+    dbeta = np.sum(dout, axis=0)
+    dgamma = np.sum(dout * x_normalized, axis=0)
+
+    std_inv = 1/np.sqrt(vareps)
+
+    dvar = np.sum(dx_norm * x_mu, axis=0) * -.5 * np.power(vareps, -3/2)
+    dmu = np.sum(dx_norm * -std_inv, axis=0) +\
+        dvar * np.mean(-2. * x_mu, axis=0)
+
+    dx = (dx_norm * std_inv) + (dvar * 2 * x_mu / N) + (dmu / N)
+
+    return dx, dgamma, dbeta
+</code></pre>
+
+<h2 id="layer-norm">Layer Normalization</h2>
 
 <br style="clear:left;">
 

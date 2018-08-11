@@ -4,7 +4,7 @@
 
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>Understanding Normalization Techniques - Neural Networks -- Melissa Mozifian</title>
+        <title>Normalization Techniques - Neural Networks -- Melissa Mozifian</title>
 
         <link rel="stylesheet" href="../../fonts/Serif/cmun-serif.css" />
         <link rel="stylesheet" href="../../fonts/Serif-Slanted/cmun-serif-slanted.css" />
@@ -35,8 +35,15 @@
 
         <link href="../../favicon.ico" rel="shortcut icon" />
 
-        <!--<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
-        <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+        MathJax.Hub.Config({
+            tex2jax: {
+            inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+            processEscapes: true
+            }
+        });
+        </script>
 
 		<link href="../../css/monokai-mel.css" rel="stylesheet" type="text/css">
 		<script src="../../js/rainbow-custom.min.js"></script>
@@ -87,7 +94,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-8">
-                            <h1>Understanding Normalization Techniques - Neural Networks</h1>
+                            <h1>Normalization Techniques - Neural Networks</h1>
                             <div class="info">
     <p style="font-family:CMSS; font-size:120%">Posted on August 06, 2018</p>
 
@@ -95,16 +102,55 @@
 </br>
 
 
-<h2 id="weight-normalization">Weight Normalization in Deep Learning</h2>
+<h2 id="activation-normalization">Neuron activation normalization in Deep Learning</h2>
+Training state-of-the-art, deep neural networks is computationally expensive. One
+way to reduce the training time is to <i>normalize the activities</i> of the neurons.
 
+During training deep neural networks, the distribution of each layer’s inputs changes,
+as the parameters of the previous layers change.
+This makes it hard to train models with saturating non-linearities.
+This is called <i>internal covariance shift</i> which is defined as the <b>change in the
+distribution of network activations</b> due to the change in
+network parameters. We can reduce the internal covariate shift by
+fixing the distribution of the layer inputs <i>x</i> as the training
+progresses.
+
+Typically the network training converges faster if its inputs
+are whitened – meaning that they are linearly transformed to have zero
+means and unit variances, and decorrelated.
+However whitening the layer inputs is expensive (requires computing the covariance
+matrix of <i>x</i>).
+
+BN also alleviates headaches with properly initializing neural networks.
+Methods normalizing the hidden features, have been derived based on strong
+assumptions of feature distributions.
+
+BN for instance does this by explicitly forcing the activations throughout a
+network to take on a unit gaussian distribution at the beginning of the training.
+
+<b>Batch Normalization (BN)</b> solves this by performing input normalization in a way
+that is differentiable and does not require the analysis of the entire training set after
+every parameter update.
+Simply put, BN uses the distribution of
+the summed input to a neuron over a mini-batch of training cases to compute a
+mean and variance which are then used to normalize the summed input to that
+neuron on each training case.
 
 <h2 id="batch-norm">Batch Normalization</h2>
-<div style="width:11.8%; margin-left:auto; margin-right:auto; margin-bottom:5px; margin-top:17px;">
+The equations below show the BN forward and backward pass.
+
+<div style="width:11.8%; margin-left:150px; margin-right:auto; margin-bottom:5px; margin-top:17px;">
 <img src="img/batch_norm_forward.png" style="width:400px;height:300px;">
 </div>
-<div style="width:11.8%; margin-left:auto; margin-right:auto; margin-bottom:5px; margin-top:17px;">
+<div style="width:11.8%; margin-left:150px; margin-right:auto; margin-bottom:5px; margin-top:17px;">
 <img src="img/batch_norm_backward.png" style="width:500px;height:300px;">
 </div>
+
+
+The code snipped below is based on the <i><a href="http://cs231n.github.io/">cs231n</a></i> showing the implementation of
+forward and backward pass as shown in the above equations.
+Note that we would insert the BatchNorm layer immediately after
+fully connected layers (or convolutional layers), and <i>before non-linearities</i>.
 
 <pre><code data-language="python">
 def batchnorm_forward(x, gamma, beta, bn_param):
@@ -161,7 +207,6 @@ def batchnorm_forward(x, gamma, beta, bn_param):
 
 <pre><code data-language="python">
 def batchnorm_backward(dout, cache):
-
     """
     Inputs:
     - dout: Upstream derivatives, of shape (N, D)
@@ -198,7 +243,201 @@ def batchnorm_backward(dout, cache):
     return dx, dgamma, dbeta
 </code></pre>
 
+
+<h2 id="layer-norm">Batch Normalization Drawbacks</h2>
+The effect of batch normalization is dependent
+on the <i>mini-batch size</i> and it is not obvious how to apply it to, for instance, recurrent neural networks (RNN).
+The other issue is that reducing the batch size can have dramatic impact on the estimated batch statistics.
+In feed-forward networks with fixed depth, it is straightforward to store the statistics separately
+for each hidden layer. However, the summed inputs to the recurrent neurons in a RNN often vary
+with the length of the sequence. So applying batch normalization to
+RNNs would require different statistics for different time-steps.
+
+
+<!--
+Several normalization methods have
+been proposed to avoid exploiting the batch dimension.
+Layer Normalization (LN) [3] operates along the channel
+dimension, and Instance Normalization (IN) [61] performs
+BN-like computation but only for each sample
+-->
+
 <h2 id="layer-norm">Layer Normalization</h2>
+
+Layer normalization (LN) estimates the normalization statistics from the summed inputs to the neurons
+<i>within a hidden layer</i>. This way the normalization does not introduce any new dependencies between training cases.
+So now instead of normalizing over the batch, we normalize over the features.
+In other words, when using LN, each feature vector corresponding to a single datapoint is normalized based on
+the sum of all terms within that feature vector.
+<br>
+Let's closely compare the equations for BN and LN, using a slightly different notation.
+<br>
+<b>Batch normalization</b>:
+
+$$ \mu_j = \frac{1}{m} \sum^{m}_{i=1} x_{ij} $$
+$$ \sigma^2_j = \frac{1}{m} \sum^{m}_{i=1}(x_{ij} - \mu_j)^2 $$
+$$ \hat{x}_{ij} = \frac{(x_{ij} - \mu_j)}{\sqrt{\sigma^2_j + \epsilon}} $$
+
+
+<b>Layer normalization</b>:
+
+$$ \mu_i = \frac{1}{m} \sum^{m}_{j=1} x_{ij} $$
+$$ \sigma^2_i = \frac{1}{m} \sum^{m}_{j=1}(x_{ij} - \mu_i)^2 $$
+$$ \hat{x}_{ij} = \frac{(x_{ij} - \mu_i)}{\sqrt{\sigma^2_i + \epsilon}} $$
+
+
+where \(x_{ij}\)  is the <i>i,j-th</i> element of the input. The <i>i</i> dimension is the batch
+and <i>j</i> is the feature dimension. Note that in the above equations, for BN <i>m</i> corresponds to the
+training samples, whereas for LN, this corresponds to the size of the feature vector.
+<br>
+To summarize, with BN, the statistics are computed across the batch and are the same for each example in the batch.
+In contrast, in LN, the statistics are computed across each feature and are independent of other examples.
+This is visually explained <a href="http://mlexplained.com/2018/01/13/weight-normalization-and-layer-normalization-explained-normalization-in-deep-learning-part-2/">here</a>.
+The implementation of LN based on the BN code above is relatively straightforward. One significant difference though
+is that for layer normalization, we do not keep track of the moving moments, and the testing phase is identical to the
+training phase, where the mean and variance are directly calculated per datapoint.
+I'll leave this as an exercise.
+
+
+<h2 id="layer-norm-draw">Layer Normalization Drawbacks</h2>
+Layer Normalization does not perform as well as Batch Normalization when used with Convolutional Layers.
+With fully connected layers, all the hidden units in a layer tend to make similar contributions to the final prediction, 
+and re-centering and rescaling the summed inputs to a layer works well. However, the assumption of <i>similar</i> contributions 
+is no longer true for convolutional neural networks. The large number of the hidden units whose receptive fields lie near
+the boundary of the image are rarely turned on and thus have very different statistics from the rest of the hidden units
+within the same layer.
+
+<h2 id="layer-norm">Group Normalization</h2>
+Group Normalization (GN) is another normalization technique which divides the channels into
+groups and computes the mean and variance within each group. Similar to LN, GN’s computation is independent of batch sizes.
+GN is inspired by classical features extractors like SIFT and HOG that are group-wise features, involving
+<i>group-wise normalization</i>. The hypothesis here is that an innate grouping arises within features for
+visual recognition.
+<br>
+<br>
+
+<pre><code data-language="python">
+def spatial_groupnorm_forward(x, gamma, beta, G, gn_param):
+    """
+    Computes the forward pass for spatial group normalization.
+
+    Inputs:
+    - x: Input data of shape (N, C, H, W)
+    - gamma: Scale parameter, of shape (C,)
+    - beta: Shift parameter, of shape (C,)
+    - G: Integer mumber of groups to split into, should be a divisor of C
+    - gn_param: Dictionary with the following keys:
+      - eps: Constant for numeric stability
+
+    Returns a tuple of:
+    - out: Output data, of shape (N, C, H, W)
+    - cache: Values needed for the backward pass
+    """
+    out, cache = None, None
+    eps = gn_param.get('eps', 1e-5)
+
+    N, C, H, W = x.shape
+    x = x.reshape(N, G, C // G, H, W)
+    sample_mean = np.mean(x, axis=(2,3,4), keepdims=True)
+    sample_var = np.var(x, axis=(2,3,4), keepdims=True)
+
+    vareps = sample_var + eps
+    x_normalized = (x - sample_mean) / np.sqrt(vareps)
+    x = x_normalized.reshape(N, C, H, W)
+    out = x * gamma + beta
+
+    cache = (x, gamma, sample_mean, vareps, x_normalized, G)
+
+    return out, cache
+</code></pre>
+
+
+<pre><code data-language="python">
+def spatial_groupnorm_backward(dout, cache):
+    """
+    Computes the backward pass for spatial group normalization.
+
+    Inputs:
+    - dout: Upstream derivatives, of shape (N, C, H, W)
+    - cache: Values from the forward pass
+
+    Returns a tuple of:
+    - dx: Gradient with respect to inputs, of shape (N, C, H, W)
+    - dgamma: Gradient with respect to scale parameter, of shape (C,)
+    - dbeta: Gradient with respect to shift parameter, of shape (C,)
+    """
+    dx, dgamma, dbeta = None, None, None
+
+    x = cache[0]
+    gamma = cache[1]
+    sample_mean = cache[2]
+    vareps = cache[3]
+    x_normalized = cache[4]
+
+    G = cache[5]
+    N, C, H, W = x.shape
+    D = (C//G) * H * W
+    x = x.reshape(N, G, C // G, H, W)
+
+    dbeta = np.sum(dout, axis=(0, 2, 3))
+    dbeta = dbeta.reshape(1, C, 1, 1)
+
+    x_normalized = x_normalized.reshape(N, C, H, W)
+    dgamma = np.sum(dout * x_normalized, axis=(0, 2, 3))
+    dgamma = dgamma.reshape(1, C, 1, 1)
+
+    x_mu = x - sample_mean
+    dx_norm = dout * gamma
+    dx_norm = dx_norm.reshape(N, G, C // G, H, W)
+
+    std_inv = 1/np.sqrt(vareps)
+
+    summ = np.sum(dx_norm * x_mu, axis=(2, 3, 4), keepdims=True)
+    dvar = summ * -.5 * np.power(vareps, -3/2)
+
+    dmu_term1 = np.sum((dx_norm * -std_inv), axis=(2, 3, 4), keepdims=True)
+
+    dmu = dmu_term1 + \
+        dvar * np.mean(-2. * x_mu, axis=(2, 3, 4), keepdims=True)
+
+    dx = (dx_norm * std_inv) + (dvar * 2 * x_mu / D) + (dmu / D)
+
+    dx = dx.reshape(N, C, H, W)
+
+    return dx, dgamma, dbeta
+</code></pre>
+
+
+
+
+
+
+<h2 id="summary-norm">Summary</h2>
+
+<div style="width:11.8%; margin-left:50px; margin-right:auto; margin-bottom:5px; margin-top:17px;">
+<img src="img/normalization_techniques.png" style="width:650px;height:200px;">
+</div>
+Figure above visualizes the different normalization methods. Each subplot shows a feature map tensor,
+with $N$ as the batch axis, $C$ as the channel axis, and $(H, W)$
+as the spatial axes. The pixels in blue are normalized by the same mean and variance, computed by
+aggregating the values of these pixels.
+<br>
+
+<ul>
+    <li>BN performs more global normalization
+along the batch dimension by computing $\mu$ and $\sigma$ along the $(N, H, W)$ axes.</li>
+
+    <li>LN computes $\mu$ and $\sigma$ along the $(C, H, W)$ axes.</li>
+    <li> Instance Normalization (IN) computes $\mu$ and $\sigma$ along 
+the $(H, W)$ axes for each sample and each channel.</li>
+    <li>GN computes $\mu$ and $\sigma$ along the $(H, W)$ axes and along a group
+of $\frac{C}{G}$ channels.
+GN becomes LN if we set the group number as $G = 1$.
+GN is less restricted than LN, because each group of
+channels (instead of all of them) are assumed to subject to
+the shared mean and variance; the model still has flexibility
+of learning a different distribution for each group.</li>
+</ul>
 
 <br style="clear:left;">
 

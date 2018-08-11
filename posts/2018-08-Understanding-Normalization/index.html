@@ -96,7 +96,7 @@
                         <div class="col-md-8">
                             <h1>Normalization Techniques - Neural Networks</h1>
                             <div class="info">
-    <p style="font-family:CMSS; font-size:120%">Posted on August 06, 2018</p>
+    <p style="font-family:CMSS; font-size:120%">Posted on August 11, 2018</p>
 
 </div>
 </br>
@@ -123,17 +123,17 @@ matrix of <i>x</i>).
 
 BN also alleviates headaches with properly initializing neural networks.
 Methods normalizing the hidden features, have been derived based on strong
-assumptions of feature distributions.
+assumptions about the feature distributions.
 
-BN for instance does this by explicitly forcing the activations throughout a
-network to take on a unit gaussian distribution at the beginning of the training.
+BN, for instance, does this by explicitly forcing the activations to take on
+a unit gaussian distribution at the beginning of the training.
 
 <b>Batch Normalization (BN)</b> solves this by performing input normalization in a way
 that is differentiable and does not require the analysis of the entire training set after
 every parameter update.
 Simply put, BN uses the distribution of
 the summed input to a neuron over a mini-batch of training cases to compute a
-mean and variance which are then used to normalize the summed input to that
+mean and variance, which are then used to normalize the summed input to that
 neuron on each training case.
 
 <h2 id="batch-norm">Batch Normalization</h2>
@@ -152,9 +152,13 @@ forward and backward pass as shown in the above equations.
 Note that we would insert the BatchNorm layer immediately after
 fully connected layers (or convolutional layers), and <i>before non-linearities</i>.
 
+<br>
+<br>
 <pre><code data-language="python">
 def batchnorm_forward(x, gamma, beta, bn_param):
     """
+    Forward pass for batch normalization.
+
     Input:
     - x: Data of shape (N, D)
     - gamma: Scale parameter of shape (D,)
@@ -208,6 +212,8 @@ def batchnorm_forward(x, gamma, beta, bn_param):
 <pre><code data-language="python">
 def batchnorm_backward(dout, cache):
     """
+    Backward pass for batch normalization.
+
     Inputs:
     - dout: Upstream derivatives, of shape (N, D)
     - cache: Variable of intermediates from batchnorm_forward.
@@ -287,7 +293,7 @@ $$ \hat{x}_{ij} = \frac{(x_{ij} - \mu_i)}{\sqrt{\sigma^2_i + \epsilon}} $$
 
 
 where \(x_{ij}\)  is the <i>i,j-th</i> element of the input. The <i>i</i> dimension is the batch
-and <i>j</i> is the feature dimension. Note that in the above equations, for BN <i>m</i> corresponds to the
+and <i>j</i> is the feature dimension. Note that in the above equations, for BN, <i>m</i> corresponds to the
 training samples, whereas for LN, this corresponds to the size of the feature vector.
 <br>
 To summarize, with BN, the statistics are computed across the batch and are the same for each example in the batch.
@@ -373,8 +379,8 @@ def spatial_groupnorm_backward(dout, cache):
     sample_mean = cache[2]
     vareps = cache[3]
     x_normalized = cache[4]
-
     G = cache[5]
+
     N, C, H, W = x.shape
     D = (C//G) * H * W
     x = x.reshape(N, G, C // G, H, W)
@@ -408,14 +414,10 @@ def spatial_groupnorm_backward(dout, cache):
 </code></pre>
 
 
-
-
-
-
 <h2 id="summary-norm">Summary</h2>
 
 <div style="width:11.8%; margin-left:50px; margin-right:auto; margin-bottom:5px; margin-top:17px;">
-<img src="img/normalization_techniques.png" style="width:650px;height:200px;">
+<img src="img/normalization_techniques.png" style="width:680px;height:200px;">
 </div>
 Figure above visualizes the different normalization methods. Each subplot shows a feature map tensor,
 with $N$ as the batch axis, $C$ as the channel axis, and $(H, W)$
@@ -434,8 +436,8 @@ the $(H, W)$ axes for each sample and each channel.</li>
 of $\frac{C}{G}$ channels.
 GN becomes LN if we set the group number as $G = 1$.
 GN is less restricted than LN, because each group of
-channels (instead of all of them) are assumed to subject to
-the shared mean and variance; the model still has flexibility
+channels are assumed to subject to
+the shared mean and variance; thus the model still has flexibility
 of learning a different distribution for each group.</li>
 </ul>
 

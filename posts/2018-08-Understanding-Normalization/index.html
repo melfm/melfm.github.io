@@ -113,7 +113,7 @@ This is called <i>internal covariance shift</i> which is defined as the <b>chang
 distribution of network activations</b> due to the change in
 network parameters. We can reduce the internal covariate shift by
 fixing the distribution of the layer inputs <i>x</i> as the training
-progresses.
+progresses. This in turn enables each layer to learn a more stable distribution of inputs.
 
 Typically the network training converges faster if its inputs
 are whitened – meaning that they are linearly transformed to have zero
@@ -121,20 +121,22 @@ means and unit variances, and decorrelated.
 However whitening the layer inputs is expensive (requires computing the covariance
 matrix of <i>x</i>).
 
-BN also alleviates headaches with properly initializing neural networks.
 Methods normalizing the hidden features, have been derived based on strong
 assumptions about the feature distributions.
 
-BN, for instance, does this by explicitly forcing the activations to take on
+Batch Normalization (BN) does this by explicitly forcing the activations to take on
 a unit gaussian distribution at the beginning of the training.
 
-<b>Batch Normalization (BN)</b> solves this by performing input normalization in a way
-that is differentiable and does not require the analysis of the entire training set after
-every parameter update.
 Simply put, BN uses the distribution of
 the summed input to a neuron over a mini-batch of training cases to compute a
 mean and variance, which are then used to normalize the summed input to that
-neuron on each training case.
+neuron on each training case. However in order to avoid restricting the activations of each layer
+to be strictly $0$ mean and unit variance, as this can limit the expressive power of the network,
+BN allows the network to learn parameters $\gamma$ and $\beta$ that can convert the mean and
+variance to any value that the network desires.
+
+This in turn, not only enables the network to train faster, it also alleviates headaches
+with properly initializing neural networks.
 
 <h2 id="batch-norm">Batch Normalization</h2>
 The equations below show the BN forward and backward pass.
@@ -344,14 +346,15 @@ def spatial_groupnorm_forward(x, gamma, beta, G, gn_param):
 
     N, C, H, W = x.shape
     x = x.reshape(N, G, C // G, H, W)
-    sample_mean = np.mean(x, axis=(2,3,4), keepdims=True)
-    sample_var = np.var(x, axis=(2,3,4), keepdims=True)
+    sample_mean = np.mean(x, axis=(2, 3, 4), keepdims=True)
+    sample_var = np.var(x, axis=(2, 3, 4), keepdims=True)
 
     vareps = sample_var + eps
     x_normalized = (x - sample_mean) / np.sqrt(vareps)
-    x = x_normalized.reshape(N, C, H, W)
-    out = x * gamma + beta
+    out = x_normalized.reshape(N, C, H, W)
+    out = out * gamma + beta
 
+    x = x.reshape(N, C, H, W)
     cache = (x, gamma, sample_mean, vareps, x_normalized, G)
 
     return out, cache
@@ -419,7 +422,7 @@ def spatial_groupnorm_backward(dout, cache):
 <div style="width:11.8%; margin-left:50px; margin-right:auto; margin-bottom:5px; margin-top:17px;">
 <img src="img/normalization_techniques.png" style="width:680px;height:200px;">
 </div>
-Figure above visualizes the different normalization methods. Each subplot shows a feature map tensor,
+Figure above visualizes the different normalization methods [3]. Each subplot shows a feature map tensor,
 with $N$ as the batch axis, $C$ as the channel axis, and $(H, W)$
 as the spatial axes. The pixels in blue are normalized by the same mean and variance, computed by
 aggregating the values of these pixels.
@@ -430,8 +433,8 @@ aggregating the values of these pixels.
 along the batch dimension by computing $\mu$ and $\sigma$ along the $(N, H, W)$ axes.</li>
 
     <li>LN computes $\mu$ and $\sigma$ along the $(C, H, W)$ axes.</li>
-    <li> Instance Normalization (IN) computes $\mu$ and $\sigma$ along 
-the $(H, W)$ axes for each sample and each channel.</li>
+    <li> <i><a href="https://arxiv.org/abs/1607.08022">Instance Normalization (IN) </a></i>
+computes $\mu$ and $\sigma$ along the $(H, W)$ axes for each sample and each channel.</li>
     <li>GN computes $\mu$ and $\sigma$ along the $(H, W)$ axes and along a group
 of $\frac{C}{G}$ channels.
 GN becomes LN if we set the group number as $G = 1$.
@@ -440,6 +443,16 @@ channels are assumed to subject to
 the shared mean and variance; thus the model still has flexibility
 of learning a different distribution for each group.</li>
 </ul>
+
+
+</br>
+[1]<i><a href="https://arxiv.org/abs/1502.03167"> Sergey Ioffe and Christian Szegedy, "Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift", ICML 2015</a></i>
+<br>
+[2]<i><a href="https://arxiv.org/abs/1607.06450"> Ba, Jimmy Lei, Jamie Ryan Kiros, and Geoffrey E. Hinton. "Layer Normalization." stat 1050 (2016): 21</a></i>
+<br>
+[3]<i><a href="https://arxiv.org/abs/1502.03167"> Wu, Yuxin, and Kaiming He. "Group Normalization." arXiv preprint arXiv:1803.08494 (2018)</a></i>
+
+
 
 <br style="clear:left;">
 

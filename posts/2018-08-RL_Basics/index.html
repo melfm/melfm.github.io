@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Reinforcement Learning Basics -- Melissa Mozifian</title>
+
+        <link rel="stylesheet" href="../../fonts/Serif/cmun-serif.css" />
+        <link rel="stylesheet" href="../../fonts/Serif-Slanted/cmun-serif-slanted.css" />
+
+        <!--BOOTSTRAP-->
+        <link href="../../bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <!--mobile first-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!--removed html from url but still is html-->
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+        <!--font awesome-->
+        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+        <!--fonts: allan & cardo-->
+        <link href="http://fonts.googleapis.com/css?family=Droid+Serif" rel="stylesheet" type="text/css">
+        <link href="http://fonts.googleapis.com/css?family=Droid+Sans" rel="stylesheet" type="text/css">
+
+        <link href="../../css/sticky-footer-navbar.css" rel="stylesheet">
+
+        <link href="../../css/default.css" rel="stylesheet">
+
+        <link href="../../comments/inlineDisqussions.css" rel="stylesheet">
+
+        <!--Highlight-->
+        <link href="../../highlight/styles/github.css" rel="stylesheet">
+
+        <link href="../../favicon.ico" rel="shortcut icon" />
+
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+
+        MathJax.Hub.Config({
+            tex2jax: {
+            inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+            processEscapes: true
+            }
+        });
+        </script>
+
+        <script type="text/x-mathjax-config">
+          MathJax.Hub.Config({ TeX: { extensions: ["color.js"] }});
+        </script>
+
+		<link href="../../css/monokai-mel.css" rel="stylesheet" type="text/css">
+		<script src="../../js/rainbow-custom.min.js"></script>
+		<script src="../../js/language/generic.js"></script>
+		<script src="../../js/language/python.js"></script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49811703-1', 'melfm.github.io');
+  ga('require', 'linkid', 'linkid.js');
+  ga('require', 'displayfeatures');
+  ga('send', 'pageview');
+
+</script>
+
+    </head>
+
+    <body>
+        <div id="wrap">
+            <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+                <div class="container">
+                    <!--Toggle header for mobile-->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand active" href="../../" style="font-size:20px;">Melissa Mozifian</a>
+                    </div>
+                    <!--normal header-->
+                    <div class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="../../about.html"><span class="glyphicon glyphicon-user"></span>  About</a></li>
+                            <li><a href="../../contact.html"><span class="glyphicon glyphicon-envelope"></span>  Contact</a></li>
+                        </ul>
+                    </div><!--/.nav-collapse -->
+                </div>
+            </nav>
+
+
+            <div id="content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h1>Reinforcement Learning Basics</h1>
+                            <div class="info">
+    <p style="font-family:CMSS; font-size:100%">Posted on August X, 2018</p>
+
+</div>
+</br>
+
+
+<h2 id="rl_basics">When to use RL</h2>
+<ul>
+    <li>Data in the form of trajectories.</li>
+    <li>Need to make a sequence of (related) decisions.</li>
+    <li>Observe feedback to choice of actions.</li>
+    <li>Tasks that require both learning and planning.</li>
+</ul>
+
+
+<h2 id="rl_basics">Challenges with RL</h2>
+<ul>
+    <li>Typically to train a RL system, a static dataset is not enough. We need access to the environment & we need to know how the actions affect the environment.</li>
+    <li>Joint learning & planning from correlated samples.</li>
+    <li>Data distribution changes over time with action choice.</li>
+</ul>
+
+<h2 id="rl_basics">The goal of RL</h2>
+<ul>
+    <li> Maximize return, $U_t$ which is the sum of rewards starting from
+        step $t$. </li>
+    <li> Episodic task: consider return over finite horizon (e.g. games, maze). </li>
+    $$
+        U_t = r_t + r_{t+1} + ... + r_{\tau}
+    $$
+    <li> Continuing task: consider return over infinite horizon (e.g. juggling, balancing). In this case, we introduce a nation of discount factor denoted by $\gamma$ that is multiplied by the reward to reduce influence of reward over time.</li>
+    $$
+    U_t = r_t + \gamma r_{t+1} + \gamma^2 r_{t+2} + ... = \sum_{k=0: \infty}
+    \gamma^k r_{t+k}
+    $$
+    <ul>
+        <li> Discount factor $\gamma \in [0, 1)$. </li>
+        <li> Intuition : Receiving \$80 today is worth the same as \$100 tomorrow assuming $\gamma = 0.8$. </li>
+    </ul>
+
+</ul>
+
+<h2>Definitions</h2>
+
+<h3>Some terminology</h3>
+<ul>
+    <li> <b> Reward </b>: 1 step numerical feedback </li>
+    <li> <b> Return </b>: Sum of rewards over the agent's trajectory </li>
+    <li> <b> Value </b>: Expected sum of reward over the agent's trajectory</li>
+    <li> <b> Utility </b>: Numerical fnction representing preferences. Sometimes in RL, for simplicity we can assume Utility $=$ Return</li>
+</ul>
+
+<h3>Behaviour: The policy</h3>
+Policy $\pi$ defines the action-selection strategy at every state:
+$$
+    \pi(s,a) = P(a_t=a|s_t=s) \\
+    \pi : S \rightarrow A
+$$
+A policy can be a deterministic strategy where the mapping is from state to action or stochastic, meaning that we have a probability of taking actions at a given state, this depends on the task. A policy is not part of the environment, but rather, what the agent is trying to learn.
+<br>
+The goal is, given a space of policies, find a policy that maximizes expected total reward.
+$$
+    argmax_{\pi}\,E_{\pi} [r_0 + r_1 + ... + r_T \,|\,s_0]
+$$
+
+<ul>
+    <li> Where $argmax$ here returns the argument that maximizes that function. </li>
+    <li> Expectation  </li>
+
+</ul>
+
+
+<h3>Value functions</h3>
+The expected return of a policy, for every state, is called the value function.
+$$
+    V^{\pi}(s) = E_{\pi}[r_t + r_{t+1} + ... + t_T \,|\,s_t = s]
+$$
+
+You can read this as: The expected value over policy $\pi$, for the sum of rewards, given you are at a patricular state $s$.
+
+<h4>The value of a policy</h4>
+We can re-write the equation for value function above, by splitting the first term and the other terms:
+$$
+    V^{\pi}(s) = E_{\pi}[r_t] + E_{\pi}[r_{t+1} + ... + t_T \,|\,s_t = s]
+$$
+Here the first term is the immediate reward. And the other term is the future reward, bundled up.
+
+$$
+    V^{\pi}(s) = E_{\pi}[r_t] + E_{\pi}[r_{t+1} + ... + t_T \,|\,s_t = s]
+$$
+
+$$
+V^{\pi}(s) = \sum_{a \in A} \pi(s,a)R(s,a) + E_{\pi}[r_{t+1} + ... + r_T\, | \, s_t=s]
+$$
+
+We want to try to get a <b>recursive formulation</b> for the value function because otherwise this value function depends on the full future. With this in mind, we are going to re-write the equation above.
+
+$$
+V^{\pi}(s) = \sum_{a \in A} \pi(s,a)R(s,a) +
+{\color{red}\sum_{a \in A} \pi(s,a) \sum_{s' \in S} T(s, a, s')}
+E_{\pi}[r_{t+1} + ... + r_T\, | \, s_{t + 1}=s']
+$$
+
+The <font color="red">red term</font> is expectation over 1-step transition. Here we are still conditioning on $s_t$. So in this case, we are starting at $s_t$, then look at $r_{t+1}$.
+So we need to express this expectation, conditioned on starting at $t+1$. Think of this as, what is the expectation of where I'm going to be, what is going to be my $s_{t+1}$?
+To do this, we also factor in the transition probability <b>and</b> the probability of taking each of the actions. Since we had already defined the last term here, we can substitute it with $V^{\pi}(s')$.
+$$
+V^{\pi}(s) = \sum_{a \in A} \pi(s,a)R(s,a) +
+\sum_{a \in A} \pi(x,a) \sum_{s' \in S}T(s,a,s') {\color{red}V^{\pi}(s')}
+$$
+
+
+
+<br style="clear:left;">
+
+</section>
+
+<div id="disqus_thread"></div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+
+<script src="../../comments/inlineDisqussions.js"></script>
+<script src="../../js/disqus.js"></script>
+
+                        </div>
+                        <div class="col-md-4"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <!-- jQuery-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+
+    <script src="../../bootstrap/js/bootstrap.min.js"></script>
+
+    <script src="../../highlight/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    <script src="../../js/footnotes.js"></script>
+
+    <script src="../../comments/inlineDisqussions.js"></script>
+
+    <noscript>Enable JavaScript for footnotes, Disqus comments, and other cool stuff.</noscript>
+
+    </body>
+
+</html>

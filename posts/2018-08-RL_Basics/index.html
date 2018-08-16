@@ -211,6 +211,23 @@ V^{\pi}(s) = \sum_{a \in A} \pi(s,a)R(s,a) +
 \sum_{a \in A} \pi(x,a) \sum_{s' \in S}T(s,a,s') {\color{red}V^{\pi}(s')}
 $$
 
+<h4>Bellman's equation</h4>
+There are two forms of Bellman's equation:
+<ul>
+    <li>State value function for a <b>fixed</b> policy:</li>
+$$
+V^{\pi}(s) = \sum_{a \in A} \pi(s,a)[{\color{pink}R(s,a)} +
+\gamma {\color{orange}\sum_{s' \in S} T(s,a,s') V^{\pi}(s')}]
+$$
+
+In the equation above, we have <font color="pink"> Immediate reward </font>, and
+<font color="orange"> future expected sum of rewards</font>.
+
+<li>State-action value function:</li>
+$$
+Q^{\pi}(s,a) = R(s,a) + \gamma \sum_s' T(s,a,s')[\sum_{a' \in A} \pi(s', a')Q^{\pi}(s',a')]
+$$
+</ul>
 
 
 <br style="clear:left;">

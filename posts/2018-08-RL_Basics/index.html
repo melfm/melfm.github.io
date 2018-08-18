@@ -109,7 +109,7 @@
 <h2 id="rl_basics">When to use RL</h2>
 <ul>
     <li>Data in the form of trajectories.</li>
-    <li>Need to make a sequence of (related) decisions.</li>
+    <li>Need to make a sequence of related decisions.</li>
     <li>Observe feedback to choice of actions.</li>
     <li>Tasks that require both learning and planning.</li>
 </ul>
@@ -124,13 +124,13 @@
 
 <h2 id="rl_basics">The goal of RL</h2>
 <ul>
-    <li> Maximize return, $U_t$ which is the sum of rewards starting from
+    <li> Maximize <b>return</b>, $U_t$ which is the sum of rewards starting from
         step $t$. </li>
-    <li> Episodic task: consider return over finite horizon (e.g. games, maze). </li>
+    <li> <b>Episodic</b> task: consider return over finite horizon (e.g. games, maze). </li>
     $$
         U_t = r_t + r_{t+1} + ... + r_{\tau}
     $$
-    <li> Continuing task: consider return over infinite horizon (e.g. juggling, balancing). In this case, we introduce a nation of discount factor denoted by $\gamma$ that is multiplied by the reward to reduce influence of reward over time.</li>
+    <li> <b>Continuing</b> task: consider return over infinite horizon (e.g. juggling, balancing). Here, we introduce a nation of discount factor denoted by $\gamma$ that is multiplied by the reward to reduce influence of reward over time.</li>
     $$
     U_t = r_t + \gamma r_{t+1} + \gamma^2 r_{t+2} + ... = \sum_{k=0: \infty}
     \gamma^k r_{t+k}
@@ -158,7 +158,7 @@ $$
     \pi(s,a) = P(a_t=a|s_t=s) \\
     \pi : S \rightarrow A
 $$
-A policy can be a deterministic strategy where the mapping is from state to action or stochastic, meaning that we have a probability of taking actions at a given state, this depends on the task. A policy is not part of the environment, but rather, what the agent is trying to learn.
+A policy can be a <b>deterministic</b> strategy where the mapping is from state to action or <b>stochastic</b>, meaning that we have a probability of taking actions at a given state, this depends on the task. A policy is not part of the environment, but rather, what the agent is trying to learn.
 <br>
 The goal is, given a space of policies, find a policy that maximizes expected total reward.
 $$
@@ -183,7 +183,7 @@ We can re-write the equation for value function above, by splitting the first te
 $$
     V^{\pi}(s) = E_{\pi}[r_t] + E_{\pi}[r_{t+1} + ... + t_T \,|\,s_t = s]
 $$
-Here the first term is the immediate reward. And the other term is the future reward, bundled up.
+Here the first term is the <b>immediate reward</b>. And the other term is the future reward, bundled up.
 
 $$
     V^{\pi}(s) = E_{\pi}[r_t] + E_{\pi}[r_{t+1} + ... + t_T \,|\,s_t = s]
@@ -243,7 +243,6 @@ Q^{\pi}(s,a) = R(s,a) + \gamma \sum_s' T(s,a,s')[\sum_{a' \in A} \pi(s', a')Q^{\
 $$
 </ul>
 
-
 <h3>Iterative Policy Evaluation: Fixed policy</h3>
 The idea here is to turn Bellman equations into update rules.
 This is a dynamic programming algorithm, guaranteed to converge, because we are introducing the discount factor $\gamma$ and the effect of this is to shrink how much we care about the future.
@@ -281,29 +280,70 @@ Any policy that achieves $V^*$ is called an optimal policy $\pi^*$.
 There can only be one optimal value function, but there can be multiple optimal policies that get you
 to that value function. More concretely, for each MDP, there is a unique optimal value function but the optimal policy is not necessarily unique.
 
+<h3>Finding a good policy: Policy iteration</h3>
+<ul>
+    <li> Start with an initial policy $\pi_0$ (e.g. random) </li>
+    <li> <b>Repeat</b>: </li>
+    <ul>
+        <li> Compute $V^{\pi}$ using iterative policy evaluation. </li>
+        <li> Compute a new policy $\pi^{'}$ that is greedy w.r.t $V^{\pi}$. </li>
+    </ul>
+    <li> Terminate when $\pi = \pi^{'}$ i.e. policy doesn't change anymore.
+</ul>
+
 <h3>Finding a good policy: Value iteration</h3>
-We can turnt he Bellman optimality equation into an interative update rule:
+With policy iteration, we compute a new policy on each round. We can take what we had previouslyfor policy evaluation, fold this improvement in within that.
+We can essentially turn he Bellman optimality equation into an interative update rule:
 
 <ol>
     <li> Start with an arbitrary initial approximation $V_0(s)$</li>
     <li> On each iteration, update the value function estimate: </li>
     $$
-    V_k(s) = max_{a \in A}(R(s,a) + \gamma \sum_{s' \in S} T(s,a,s')V_{k-1}(s'))
+    \color{purple}V_k(s) = max_{a \in A}(R(s,a) + \gamma \sum_{s' \in S} T(s,a,s')V_{k-1}(s'))
     $$
     <li> Stop when max value change between iterations is below threshold.
-
 </ol>
 <br>
-Recap of these three related algorithms:
 
+<b>Recap</b> of these three related algorithms:
 <ol>
-    <li> Policy evaluation: Fix the policy, estimate its value</li>
-    <li> Policy iteration: Find the best policy at each state.</li>
+    <li> <b>Policy evaluation</b>: Fix the policy, estimate its value</li>
+    <ul>
+        <li> $ \color{purple} O(S^3)$ </li>
+        <li> To understand the time complexity, we can think of the simple case where we need to solve a linear system of equations which is a cubic number of operations in terms of number of states.
+    </ul>
+    <li> <b>Policy iteration</b>: Find the best policy at each state.</li>
     <ul>
         <li> Remember the extra step here was adding the greedy improvement. </li>
+        <li> $ \color{purple} O(S^3+S^2A)$</li>
+        <li> Extra step for computing the Bellman equation for every state. </li>
     </ul>
-    <li> Value iteration: Find the optimal value function. </li>
+    <li> <b>Value iteration</b>: Find the optimal value function. </li>
+    <ul>
+        <li> $ \color{purple} O(S^2A)$ </li>
+    </ul>
 </ol>
+
+<h3>Online reinforcement learning</h3>
+One approach is based on <b>Monte-Carlo</b> value estimation principle, where we use the empirical return, $U(s_t)$ as a target estimate
+for the actual value function:
+$$
+    V(s_t) \leftarrow V(s_t)+ \alpha (U(s_t)-V(s_t))
+$$
+This is not a Bellman equation but rather a <b>gradient equation</b>. Here $\alpha$ is learning rate.
+This method basically runs a trajectory, looks at the samples from the empirical return, compares the difference between the observed empirical return for the this trajectory and the estimated value function. We can think of this as an error signal, where we update the value function proportional to this error signal. This method does not require to know the reward function nor the transition probabilities. However it does require many trajectories i.e. samples to be able to properly estimate this return.
+
+
+<h3>Temporal Difference (TD) learning</h3>
+TD learning:
+$$
+V(s_t) \leftarrow V(s_t)+ \alpha ({\color{red}r_{t+1} + \gamma V(s_{t+1}})) \forall t=0,1,2,...
+$$
+
+With <font color="red">TD-error</font> and learning rate $\alpha$.
+Intead of waiting till the end of trajectory to estimate the return,
+we estimate using Bellman equation, using the immediate reward
+and for the futur reward, just plug in the current estimate and discount that
 
 
 

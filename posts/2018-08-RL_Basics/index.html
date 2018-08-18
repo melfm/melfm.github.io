@@ -100,7 +100,7 @@
                         <div class="col-md-8">
                             <h1>Reinforcement Learning Basics</h1>
                             <div class="info">
-    <p style="font-family:CMSS; font-size:100%">Posted on August X, 2018</p>
+    <p style="font-family:CMSS; font-size:100%">Posted on August 18, 2018</p>
 
 </div>
 </br>
@@ -136,7 +136,7 @@
     \gamma^k r_{t+k}
     $$
     <ul>
-        <li> Discount factor $\gamma \in [0, 1)$. </li>
+        <li> Discount factor $\gamma \in [0, 1)$, decays the value of rewards exponentially.</li>
         <li> Intuition : Receiving \$80 today is worth the same as \$100 tomorrow assuming $\gamma = 0.8$. </li>
     </ul>
 
@@ -152,13 +152,50 @@
     <li> <b> Utility </b>: Numerical fnction representing preferences. Sometimes in RL, for simplicity we can assume Utility $=$ Return</li>
 </ul>
 
+<h2 id="mdp-def">Markov Decision Processes (MDPs)</h2>
+<ul>
+    <li> A set of states $s \in S$</li>
+    <li> A set of actions $a \in A$ </li>
+    <li> A transition function $T(s, a, s')$</li>
+    <ul>
+        <li> You are in some state $s$, you take action $a$, $s'$ is
+            a possible result.</li>
+        <li> This is a conditional probability $P(s'|s,a)$. </li>
+        <li> Also called the model or the dynamics. </li>
+    </ul>
+    <li> A reward function $R(s, a)$</li>
+    <li> Initial state distribution $\mu(s)$</li>
+</ul>
+
+
+<h2>The <b>Markov</b> property</h2>
+The distribution over future states depends only on the <b>present state and
+action</b>, not on any other previous events.
+$$
+Pr(s_{t+1} | s_0, ..., s_t, a_0, ... , a_t) = Pr(S_{t+1}\,|\, s_t, a_t)
+$$
+
+We can think of state, as sufficient amount of information required to predict the future.
+Markov generally means that given the present state, the future and the past are independent.
+In other words, if we know the state at the current time, whatever happened in the past, is independent of what is going to happen in the future.
+
+So if we were to look at all the states, we would have something like:
+$$
+    P(S_{t+1} = s' | S_t = s_t, A_t=a_t, S_{t-1}=s_{t-1}, A_{t-1},... S_0=s_0)
+$$
+
+With Markov assumption, this simplifies to $\rightarrow$
+$$
+    P(S_{t+1}=s' | S_t = s_t, A_t = a_t)
+$$
+
 <h3>Behaviour: The policy</h3>
 Policy $\pi$ defines the action-selection strategy at every state:
 $$
     \pi(s,a) = P(a_t=a|s_t=s) \\
     \pi : S \rightarrow A
 $$
-A policy can be a <b>deterministic</b> strategy where the mapping is from state to action or <b>stochastic</b>, meaning that we have a probability of taking actions at a given state, this depends on the task. A policy is not part of the environment, but rather, what the agent is trying to learn.
+A policy can be a <b>deterministic</b> strategy where the mapping is from state to action, or <b>stochastic</b>, meaning that we have a probability of taking actions at a given state, this depends on the task. A policy is not part of the environment, but rather, what the agent is trying to learn.
 <br>
 The goal is, given a space of policies, find a policy that maximizes expected total reward.
 $$
@@ -333,7 +370,7 @@ $$
 This is not a Bellman equation but rather a <b>gradient equation</b>. Here $\alpha$ is learning rate.
 This method basically runs a trajectory, looks at the samples from the empirical return, compares the difference between the observed empirical return for the this trajectory and the estimated value function. We can think of this as an error signal, where we update the value function proportional to this error signal. This method does not require to know the reward function nor the transition probabilities. However it does require many trajectories i.e. samples to be able to properly estimate this return.
 
-
+<!--
 <h3>Temporal Difference (TD) learning</h3>
 TD learning:
 $$
@@ -344,8 +381,7 @@ With <font color="red">TD-error</font> and learning rate $\alpha$.
 Intead of waiting till the end of trajectory to estimate the return,
 we estimate using Bellman equation, using the immediate reward
 and for the futur reward, just plug in the current estimate and discount that
-
-
+--!>
 
 <br style="clear:left;">
 

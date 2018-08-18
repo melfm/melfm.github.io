@@ -102,30 +102,9 @@
 </br>
 
 
-<h2 id="mdp-def">MDP Definition</h2>
-<ul>
-    <li> A set of states $s \in S$</li>
-    <li> A set of actions $a \in A$ </li>
-    <li> A transition function $T(s, a, s')$</li>
-    <ul>
-        <li> You are in some state $s$, you take action $a$, $s'$ is
-            a possible result.</li>
-        <li> This is a conditional probability $P(s'|s,a)$. </li>
-        <li> Also called the model or the dynamics. </li>
-    </ul>
-    <li> A reward function $R(s, a)$</li>
-    <li> Initial state distribution $\mu(s)$</li>
-</ul>
 
 
-<h2>The <b>Markov</b> property</h2>
-The distribution over future states depends only on the <b>present state and
-action</b>, not on any other previous events.
-$$
-Pr(s_{t+1} | s_0, ..., s_t, a_0, ... , a_t) = Pr(S_{t+1} | s_t, a_t)
-$$
 
-We can think of state, as sufficient amount of information required to predict the future.
 
 <br style="clear:left;">
 

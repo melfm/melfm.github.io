@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Reinforcement Learning Basics -- Melissa Mozifian</title>
+
+        <link rel="stylesheet" href="../../fonts/Serif/cmun-serif.css" />
+        <link rel="stylesheet" href="../../fonts/Serif-Slanted/cmun-serif-slanted.css" />
+
+        <!--BOOTSTRAP-->
+        <link href="../../bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <!--mobile first-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!--removed html from url but still is html-->
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+        <!--font awesome-->
+        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+        <!--fonts: allan & cardo-->
+        <link href="http://fonts.googleapis.com/css?family=Droid+Serif" rel="stylesheet" type="text/css">
+        <link href="http://fonts.googleapis.com/css?family=Droid+Sans" rel="stylesheet" type="text/css">
+
+        <link href="../../css/sticky-footer-navbar.css" rel="stylesheet">
+
+        <link href="../../css/default.css" rel="stylesheet">
+
+        <link href="../../comments/inlineDisqussions.css" rel="stylesheet">
+
+        <!--Highlight-->
+        <link href="../../highlight/styles/github.css" rel="stylesheet">
+
+        <link href="../../favicon.ico" rel="shortcut icon" />
+
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+
+        MathJax.Hub.Config({
+            tex2jax: {
+            inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+            processEscapes: true
+            }
+        });
+        </script>
+
+        <script type="text/x-mathjax-config">
+          MathJax.Hub.Config({ TeX: { extensions: ["color.js"] }});
+        </script>
+
+		<link href="../../css/monokai-mel.css" rel="stylesheet" type="text/css">
+		<script src="../../js/rainbow-custom.min.js"></script>
+		<script src="../../js/language/generic.js"></script>
+		<script src="../../js/language/python.js"></script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49811703-1', 'melfm.github.io');
+  ga('require', 'linkid', 'linkid.js');
+  ga('require', 'displayfeatures');
+  ga('send', 'pageview');
+
+</script>
+
+    </head>
+
+    <body>
+        <div id="wrap">
+            <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+                <div class="container">
+                    <!--Toggle header for mobile-->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand active" href="../../" style="font-size:20px;">Melissa Mozifian</a>
+                    </div>
+                    <!--normal header-->
+                    <div class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="../../about.html"><span class="glyphicon glyphicon-user"></span>  About</a></li>
+                            <li><a href="../../contact.html"><span class="glyphicon glyphicon-envelope"></span>  Contact</a></li>
+                        </ul>
+                    </div><!--/.nav-collapse -->
+                </div>
+            </nav>
+
+
+            <div id="content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h1>Reinforcement Learning Basics</h1>
+                            <div class="info">
+    <p style="font-family:CMSS; font-size:100%">Posted on August 18, 2018</p>
+
+</div>
+</br>
+
+
+<h2 id="rl_basics">When to use RL</h2>
+<ul>
+    <li>Data in the form of trajectories.</li>
+    <li>Need to make a sequence of related decisions.</li>
+    <li>Observe feedback to choice of actions.</li>
+    <li>Tasks that require both learning and planning.</li>
+</ul>
+
+
+<h2 id="rl_basics">Challenges with RL</h2>
+<ul>
+    <li>Typically to train a RL system, a static dataset is not enough. We need access to the environment & we need to know how the actions affect the environment.</li>
+    <li>Joint learning & planning from correlated samples.</li>
+    <li>Data distribution changes over time with action choice.</li>
+</ul>
+
+<h2 id="rl_basics">The goal of RL</h2>
+<ul>
+    <li> Maximize <b>return</b>, $U_t$ which is the sum of rewards starting from
+        step $t$. </li>
+    <li> <b>Episodic</b> task: consider return over finite horizon (e.g. games, maze). </li>
+    $$
+        U_t = r_t + r_{t+1} + ... + r_{\tau}
+    $$
+    <li> <b>Continuing</b> task: consider return over infinite horizon (e.g. juggling, balancing). Here, we introduce a nation of discount factor denoted by $\gamma$ that is multiplied by the reward to reduce influence of reward over time.</li>
+    $$
+    U_t = r_t + \gamma r_{t+1} + \gamma^2 r_{t+2} + ... = \sum_{k=0: \infty}
+    \gamma^k r_{t+k}
+    $$
+    <ul>
+        <li> Discount factor $\gamma \in [0, 1)$, decays the value of rewards exponentially.</li>
+        <li> Intuition : Receiving \$80 today is worth the same as \$100 tomorrow assuming $\gamma = 0.8$. </li>
+    </ul>
+
+</ul>
+
+<h2>Definitions</h2>
+
+<h3>Some terminology</h3>
+<ul>
+    <li> <b> Reward </b>: 1 step numerical feedback </li>
+    <li> <b> Return </b>: Sum of rewards over the agent's trajectory </li>
+    <li> <b> Value </b>: Expected sum of reward over the agent's trajectory</li>
+    <li> <b> Utility </b>: Numerical fnction representing preferences. Sometimes in RL, for simplicity we can assume Utility $=$ Return</li>
+</ul>
+
+<h2 id="mdp-def">Markov Decision Processes (MDPs)</h2>
+<ul>
+    <li> A set of states $s \in S$</li>
+    <li> A set of actions $a \in A$ </li>
+    <li> A transition function $T(s, a, s')$</li>
+    <ul>
+        <li> You are in some state $s$, you take action $a$, $s'$ is
+            a possible result.</li>
+        <li> This is a conditional probability $P(s'|s,a)$. </li>
+        <li> Also called the model or the dynamics. </li>
+    </ul>
+    <li> A reward function $R(s, a)$</li>
+    <li> Initial state distribution $\mu(s)$</li>
+</ul>
+
+
+<h2>The <b>Markov</b> property</h2>
+The distribution over future states depends only on the <b>present state and
+action</b>, not on any other previous events.
+$$
+Pr(s_{t+1} | s_0, ..., s_t, a_0, ... , a_t) = Pr(S_{t+1}\,|\, s_t, a_t)
+$$
+
+We can think of state, as sufficient amount of information required to predict the future.
+Markov generally means that given the present state, the future and the past are independent.
+In other words, if we know the state at the current time, whatever happened in the past, is independent of what is going to happen in the future.
+
+So if we were to look at all the states, we would have something like:
+$$
+    P(S_{t+1} = s' | S_t = s_t, A_t=a_t, S_{t-1}=s_{t-1}, A_{t-1},... S_0=s_0)
+$$
+
+With Markov assumption, this simplifies to $\rightarrow$
+$$
+    P(S_{t+1}=s' | S_t = s_t, A_t = a_t)
+$$
+
+<h3>Behaviour: The policy</h3>
+Policy $\pi$ defines the action-selection strategy at every state:
+$$
+    \pi(s,a) = P(a_t=a|s_t=s) \\
+    \pi : S \rightarrow A
+$$
+A policy can be a <b>deterministic</b> strategy where the mapping is from state to action, or <b>stochastic</b>, meaning that we have a probability of taking actions at a given state, this depends on the task. A policy is not part of the environment, but rather, what the agent is trying to learn.
+<br>
+The goal is, given a space of policies, find a policy that maximizes expected total reward.
+$$
+    argmax_{\pi}\,E_{\pi} [r_0 + r_1 + ... + r_T \,|\,s_0]
+$$
+
+<ul>
+    <li> Where $argmax$ here returns the argument that maximizes that function. </li>
+</ul>
+
+
+<h3>Value functions</h3>
+The expected return of a policy, for every state, is called the value function.
+$$
+    V^{\pi}(s) = E_{\pi}[r_t + r_{t+1} + ... + t_T \,|\,s_t = s]
+$$
+
+You can read this as: The expected value over policy $\pi$, for the sum of rewards, given you are at a patricular state $s$.
+
+<h4>The value of a policy</h4>
+We can re-write the equation for value function above, by splitting the first term and the other terms:
+$$
+    V^{\pi}(s) = E_{\pi}[r_t] + E_{\pi}[r_{t+1} + ... + t_T \,|\,s_t = s]
+$$
+Here the first term is the <b>immediate reward</b>. And the other term is the future reward, bundled up.
+
+$$
+    V^{\pi}(s) = E_{\pi}[r_t] + E_{\pi}[r_{t+1} + ... + t_T \,|\,s_t = s]
+$$
+
+$$
+V^{\pi}(s) = \sum_{a \in A} \pi(s,a)R(s,a) + E_{\pi}[r_{t+1} + ... + r_T\, | \, s_t=s]
+$$
+
+We want to try to get a <b>recursive formulation</b> for the value function because otherwise this value function depends on the full future. With this in mind, we are going to re-write the equation above.
+
+$$
+V^{\pi}(s) = \sum_{a \in A} \pi(s,a)R(s,a) +
+{\color{red}\sum_{a \in A} \pi(s,a) \sum_{s' \in S} T(s, a, s')}
+E_{\pi}[r_{t+1} + ... + r_T\, | \, s_{t + 1}=s']
+$$
+
+The <font color="red">red term</font> is expectation over 1-step transition. Here we are still conditioning on $s_t$. So in this case, we are starting at $s_t$, then look at $r_{t+1}$.
+So we need to express this expectation, conditioned on starting at $t+1$. Think of this as, what is the expectation of where I'm going to be, what is going to be my $s_{t+1}$?
+To do this, we also factor in the transition probability <b>and</b> the probability of taking each of the actions. Since we had already defined the last term here, we can substitute it with $V^{\pi}(s')$.
+$$
+V^{\pi}(s) = \sum_{a \in A} \pi(s,a)R(s,a) +
+\sum_{a \in A} \pi(x,a) \sum_{s' \in S}T(s,a,s') {\color{red}V^{\pi}(s')}
+$$
+
+<h4>Bellman's equation</h4>
+There are two forms of Bellman's equation:
+<ul>
+    <li>State value function for a <b>fixed</b> policy:</li>
+$$
+V^{\pi}(s) = \sum_{a \in A} \pi(s,a)[{\color{pink}R(s,a)} +
+\gamma {\color{orange}\sum_{s' \in S} T(s,a,s') V^{\pi}(s')}]
+$$
+
+In the equation above, we have <b><font color="pink"> Immediate reward </font></b>, and
+<b><font color="orange"> future expected sum of rewards</font></b>. When $S$ is a <b>finite set of states</b>,
+this is a <b>system of linear equations</b> (one per state) with a unique solution $V_{\pi}$.
+<br>
+Seeing this problem this way, we can write the Bellman's equation in matrix form:
+$$
+    V_{\pi} = R_{\pi} + \gamma T_{\pi} V_{\pi}
+$$
+
+Where $V_{\pi}$ is a vector representing value of all the states, $R_{\pi}$ is another vector representing reward for each of the states. The transition matrix is an $S \times S$ square matrix.
+
+This can be solved exactly (subject to certain conditions):
+$$
+V_{\pi} = (I - \gamma T^{\pi})^{-1} R^{\pi}
+$$
+
+Note that this is conditioned for a fixed policy. We haven't started tackling the task of <b>looking for good policies </b> yet.
+This is rather a simple strategy of saying, let's enumerate all possible policies, and then evaluate them one by one.
+
+<li>State-action value function:</li>
+$$
+Q^{\pi}(s,a) = R(s,a) + \gamma \sum_s' T(s,a,s')[\sum_{a' \in A} \pi(s', a')Q^{\pi}(s',a')]
+$$
+</ul>
+
+<h3>Iterative Policy Evaluation: Fixed policy</h3>
+The idea here is to turn Bellman equations into update rules.
+This is a dynamic programming algorithm, guaranteed to converge, because we are introducing the discount factor $\gamma$ and the effect of this is to shrink how much we care about the future.
+<br>
+<br>
+<ol>
+    <li> Start with some initial guess $V_0(s), \forall s$. (Can be 0 or r(s).) </li>
+    <li> During every iteration $k$, update the value function for all states:</li>
+    $$
+        V_{k+1}(s) \leftarrow (R(s, \pi(s)) + \gamma \sum_{s' \in S} T(s, \pi(s), s')V_k(s'))
+    $$
+    <li> Stop when the maximum changes between two iterations is smaller than a desired threshold (basicallywhen the value stops changing.)
+</ol>
+
+<h3>Convergence of Iterative Policy Evaluation</h3>
+Let's consider the absolute error in our estimate $V_{k+1}(s)$:
+$$
+\begin{align}
+|V_{k+1}(s) - V^{\pi}(s)| = \Big{|}\sum_a(s,a)(R(s,a) + \gamma \sum_{s'}T(s,a,s')V_k(s')) \\
+- \sum_a \pi (s,a)(R(s,a) + \gamma \sum_{s'} T(s,a,s')V^{\pi}(s'))\Big{|} \\
+= \gamma \Big{|}\sum_a \pi(s,a) \sum_{s'}T(s,a,s')(V_k(s') - V^{\pi}(s')) \Big{|} \\
+\leq \gamma \sum_a \pi(s,a) \sum_{s'}T(s,a,s')|V_k(s') - V^{\pi}(s')|
+\end{align}
+$$
+
+Remember that as long as $\gamma < 1$, the <b>error contracts</b> and eventually goes to 0.
+
+<h3>Optimal policies and optimal value functions</h3>
+Optimal value function $V^*$ is the highest value that can be achieved for each state.
+$$
+    V^*(s)=max_{\pi} V^{\pi}(s)
+$$
+
+Any policy that achieves $V^*$ is called an optimal policy $\pi^*$.
+There can only be one optimal value function, but there can be multiple optimal policies that get you
+to that value function. More concretely, for each MDP, there is a unique optimal value function but the optimal policy is not necessarily unique.
+
+<h3>Finding a good policy: Policy iteration</h3>
+<ul>
+    <li> Start with an initial policy $\pi_0$ (e.g. random) </li>
+    <li> <b>Repeat</b>: </li>
+    <ul>
+        <li> Compute $V^{\pi}$ using iterative policy evaluation. </li>
+        <li> Compute a new policy $\pi^{'}$ that is greedy w.r.t $V^{\pi}$. </li>
+    </ul>
+    <li> Terminate when $\pi = \pi^{'}$ i.e. policy doesn't change anymore.
+</ul>
+
+<h3>Finding a good policy: Value iteration</h3>
+With policy iteration, we compute a new policy on each round. We can take what we had previouslyfor policy evaluation, fold this improvement in within that.
+We can essentially turn he Bellman optimality equation into an interative update rule:
+
+<ol>
+    <li> Start with an arbitrary initial approximation $V_0(s)$</li>
+    <li> On each iteration, update the value function estimate: </li>
+    $$
+    \color{purple}V_k(s) = max_{a \in A}(R(s,a) + \gamma \sum_{s' \in S} T(s,a,s')V_{k-1}(s'))
+    $$
+    <li> Stop when max value change between iterations is below threshold.
+</ol>
+<br>
+
+<b>Recap</b> of these three related algorithms:
+<ol>
+    <li> <b>Policy evaluation</b>: Fix the policy, estimate its value</li>
+    <ul>
+        <li> $ \color{purple} O(S^3)$ </li>
+        <li> To understand the time complexity, we can think of the simple case where we need to solve a linear system of equations which is a cubic number of operations in terms of number of states.
+    </ul>
+    <li> <b>Policy iteration</b>: Find the best policy at each state.</li>
+    <ul>
+        <li> Remember the extra step here was adding the greedy improvement. </li>
+        <li> $ \color{purple} O(S^3+S^2A)$</li>
+        <li> Extra step for computing the Bellman equation for every state. </li>
+    </ul>
+    <li> <b>Value iteration</b>: Find the optimal value function. </li>
+    <ul>
+        <li> $ \color{purple} O(S^2A)$ </li>
+    </ul>
+</ol>
+
+<h3>Online reinforcement learning</h3>
+One approach is based on <b>Monte-Carlo</b> value estimation principle, where we use the empirical return, $U(s_t)$ as a target estimate
+for the actual value function:
+$$
+    V(s_t) \leftarrow V(s_t)+ \alpha (U(s_t)-V(s_t))
+$$
+This is not a Bellman equation but rather a <b>gradient equation</b>. Here $\alpha$ is learning rate.
+This method basically runs a trajectory, looks at the samples from the empirical return, compares the difference between the observed empirical return for the this trajectory and the estimated value function. We can think of this as an error signal, where we update the value function proportional to this error signal. This method does not require to know the reward function nor the transition probabilities. However it does require many trajectories i.e. samples to be able to properly estimate this return.
+
+<!--
+<h3>Temporal Difference (TD) learning</h3>
+TD learning:
+$$
+V(s_t) \leftarrow V(s_t)+ \alpha ({\color{red}r_{t+1} + \gamma V(s_{t+1}})) \forall t=0,1,2,...
+$$
+
+With <font color="red">TD-error</font> and learning rate $\alpha$.
+Intead of waiting till the end of trajectory to estimate the return,
+we estimate using Bellman equation, using the immediate reward
+and for the futur reward, just plug in the current estimate and discount that
+-->
+
+<br style="clear:left;">
+
+</section>
+
+<div id="disqus_thread"></div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+
+<script src="../../comments/inlineDisqussions.js"></script>
+<script src="../../js/disqus.js"></script>
+
+                        </div>
+                        <div class="col-md-4"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <!-- jQuery-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+
+    <script src="../../bootstrap/js/bootstrap.min.js"></script>
+
+    <script src="../../highlight/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    <script src="../../js/footnotes.js"></script>
+
+    <script src="../../comments/inlineDisqussions.js"></script>
+
+    <noscript>Enable JavaScript for footnotes, Disqus comments, and other cool stuff.</noscript>
+
+    </body>
+
+</html>

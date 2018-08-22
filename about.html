@@ -4,56 +4,121 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta http-equiv="X-UA-Compatible" content="chrome=1">
   <title>melfm.github.io by melfm</title>
+
+  <!--BOOTSTRAP-->
+  <link href="./bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <!--mobile first-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!--removed html from url but still is html-->
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="stylesheet" href="./fonts/Serif/cmun-serif.css" />
+        <link rel="stylesheet" href="./fonts/Serif-Slanted/cmun-serif-slanted.css" />
+
+  <!--font awesome-->
+
+  <!--fonts: allan & cardo-->
+  <link href="http://fonts.googleapis.com/css?family=Droid+Serif" rel="stylesheet" type="text/css">
+  <link href="http://fonts.googleapis.com/css?family=Droid+Sans" rel="stylesheet" type="text/css">
+
+  <link href="./css/sticky-footer-navbar.css" rel="stylesheet">
+
+
   <link rel="stylesheet" href="css/style.css">
-  <meta name="viewport" content="width=device-width">
-  <style type="text/css">
+ <link href="./css/default_intro.css" rel="stylesheet">
 
-  div.paper {
-    clear: both;
-    margin-top: 0.3em;
-    margin-bottom: 0.3em;
-    <!--border: 1px solid #ddd;-->
-    background: #fff;
-    padding: 1em 1em 1em 1em;
-    <!--height: 180px-->
-  }
 
-  div.paper div {
-    padding-left: 280px;
-  }
-  div.paper div.wide {
-    padding-right: 120px;
-  }
-  img.paper {
-    margin-bottom: 0.5em;
-    margin-right: 1.0em;
-    float: left;
-    width: 260px;
-    height: 180px;
-  }
+<meta name="viewport" content="width=device-width">
+<style type="text/css">
 
-  div.relative {
-      position: relative;
-      left: 30px;
-  }
-  pink {
-    color: hotpink;
-  }
+div.paper {
+  clear: both;
+  margin-top: 0.3em;
+  margin-bottom: 0.3em;
+  <!--border: 1px solid #ddd;-->
+  background: #fff;
+  <!--height: 180px-->
+}
 
-  </style>
+div.paper div {
+  padding-left: 280px;
+}
+div.paper div.wide {
+  padding-right: 120px;
+}
+img.paper {
+  margin-bottom: 0.5em;
+  margin-right: 1.0em;
+  float: left;
+  width: 260px;
+  height: 180px;
+}
+
+div.relative {
+    position: relative;
+    left: 30px;
+}
+
+p {
+  font-size: 17px;
+}
+
+
+.navbar {
+  overflow: hidden;
+  top: 0;
+  width: 100%;
+}
+
+
+li.projects {
+  margin: 40px 0;
+}
+
+h2 {
+  font-size:20px;
+  font-weight: bold;
+}
+
+pink {
+  color: hotpink;
+}
+
+</style>
 </head>
 
 <body>
-  <div class="wrapper">
-    <header>
-      <h1>Melissa Mozifian</h1>
-      <img src="docs/images/DSC_4216.jpg" alt="avod">
-      <p> </p>
+      <div id="wrap">
+          <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+              <div class="container">
+                  <!--Toggle header for mobile-->
+                  <div class="navbar-header">
+                      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                          <span class="sr-only">Toggle navigation</span>
+                          <span class="icon-bar"></span>
+                          <span class="icon-bar"></span>
+                          <span class="icon-bar"></span>
+                      </button>
+                      <a class="navbar-brand active" href="./" id="home">Melissa Mozifian</a>
+                  </div>
+                  <!--normal header-->
+                  <div class="navbar-collapse collapse">
+                      <ul class="nav navbar-nav navbar-right">
+                          <li><a href="./about.html"><span class="glyphicon glyphicon-user"></span>  About</a></li>
+                          <li><a href="./contact.html"><span class="glyphicon glyphicon-envelope"></span>  Contact</a></li>
+                      </ul>
+                  </div><!--/.nav-collapse -->
+              </div>
+          </nav>
+<div class="wrapper">
+  <header>
+    <img src="docs/images/DSC_4216.jpg" alt="avod">
+    <p> </p>
 
     </header>
     <div class="relative">
       <div>
-        <h2>About </h2>
+        <br>
           <p>
             I am currently a Master student in the
             <a href="http://wavelab.uwaterloo.ca/">Autonomous Vehicles Lab</a> at the Department of Mechanical and Mechantronics Engineering at the
@@ -74,7 +139,7 @@
     <section>
       <h2> Current Projects </h2>
       <ul>
-      <li>
+      <li >
       3D Single Stage Object Detection for Autonomous Driving
       <blockquote>
         AVOD-SSD <a href = "https://github.com/melfm/avod-ssd"> <b><pink>Code</pink></b> </a>
@@ -86,7 +151,7 @@
       </blockquote>
       </ul>
 
-      <h2> Publications </h2>
+  <h2> Publications </h2>
   <div class="panel-body">
     <!-- Begin of a paper -->
     <div class="paper">
@@ -105,7 +170,7 @@
             <a href = "https://youtu.be/M5J65pSkjA8"> More Video</a>
 
             <!-- <a href = "https://youtu.be/POqBiiLaslk" target="_blank"><font>Youtube</font></a>
-             / <a href = "files/mv3d/mv3d_kitti.mp4" target="_blank"><font> Video </font></a></br>//-->
+            / <a href = "files/mv3d/mv3d_kitti.mp4" target="_blank"><font> Video </font></a></br>//-->
             <pre id="cvpr17chen"  xml:space="preserve" style="display: none;">
             </pre>
           </td>
@@ -140,7 +205,7 @@
         <p> Teaching assistant for the course <i> Autonomous Mobile Robots </i> covering topics such as State Space Modeling, Coordinate Transforms, Motion Modeling, Estimation: Bayes, Kalman, EKF, Particle Filters, Mapping: Localization, Mapping, SLAM and Path Planning</p>
       </blockquote>
       </blockquote>
-      <li><a href="https://github.com/jzarnett/ece459">Programming for Performance [Electrical and Computer Engineering Course]</a>
+      <li class="projects"><a href="https://github.com/jzarnett/ece459">Programming for Performance [Electrical and Computer Engineering Course]</a>
       <blockquote>
         <p> Teaching assistant for the course <i> Programming for performance </i> covering programming with OpenCL.</p>
       </blockquote>
@@ -148,7 +213,7 @@
     <h2> Past Projects </h2>
       <ul>
       </blockquote>
-      <li><a href="http://www.autonomoose.net/"> Autonomoose</a>
+      <li class="projects"><a href="http://www.autonomoose.net/"> Autonomoose</a>
       <blockquote>
       <p>
         Worked on deploying our 3D object detector, AVOD, with <a href="http://www.ros.org/">ROS</a> integration on our self-driving car <a href="https://www.youtube.com/watch?v=gp9Eu50gxO4"> See video </a> </li>
@@ -156,24 +221,24 @@
       <iframe width="460" height="215" src="https://www.youtube.com/embed/gp9Eu50gxO4" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
       </p>
       </blockquote>
-      <li><a href="https://github.com/melfm/dukecone">Neural Network based EKF Localization</a>
+      <li class="projects"><a href="https://github.com/melfm/dukecone">Neural Network based EKF Localization</a>
       <blockquote>
         <p>  Object-based localization method with neural networks using <a href="https://pjreddie.com/darknet/yolo/">YOLO</a> (real-time object detector) to localize objects in the camera frame. Using these detected objects as features, an Extended Kalman Filter was used to estimate the robot pose.<a href="https://www.youtube.com/watch?v=OcQGvapoJCg"> See video </a>
       </p>
       </blockquote>
-      <li><a href="https://github.com/melfm/kaggle-seizure-prediction">Kaggle Seizure Prediction Challenge</a>
+      <li class="projects"><a href="https://github.com/melfm/kaggle-seizure-prediction">Kaggle Seizure Prediction Challenge</a>
       <blockquote>
       <p> Electrical brain activity (EEG) based seizure forecasting systems using machine learning methods such as Gradient Boosting, Convolutional Neural Networks (CNN) and Recurrent Neural Networks (RNN). See the <a href="https://www.kaggle.com/c/melbourne-university-seizure-prediction"> challenge</a>
 
       </p>
       </blockquote>
       </blockquote>
-      <li><a href="https://github.com/melfm/ece-course-proj/blob/master/report/modelling-quadrotor-dynamics.pdf">Modelling Quadrotor Dynamics Using Neural Networks</a>
+      <li class="projects"><a href="https://github.com/melfm/ece-course-proj/blob/master/report/modelling-quadrotor-dynamics.pdf">Modelling Quadrotor Dynamics Using Neural Networks</a>
       <blockquote>
       <p> Using deep recurrent neural network architecture to model quadrotor dynamics with autoencoders as a pre-training technique.
       </p>
       </blockquote>
-      <li><a href="https://info.cs.st-andrews.ac.uk/student-handbook/files/project-library/sh/Mozifian.pdf">Affective Mirror (BSc Dissertation)</a>
+      <li class="projects"><a href="https://info.cs.st-andrews.ac.uk/student-handbook/files/project-library/sh/Mozifian.pdf">Affective Mirror (BSc Dissertation)</a>
       <blockquote>
       <p>  The goal of this project was to develop a
             system with the ability to detect emotions such as happiness,
@@ -181,13 +246,13 @@
       </p>
       <iframe width="560" height="315" src="https://www.youtube.com/embed/cIABgfEnbGs" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
       </blockquote>
-      <li><a href="https://github.com/melfm/pulse-detector">Webcam-based Pulse Detector</a>
+      <li class="projects"><a href="https://github.com/melfm/pulse-detector">Webcam-based Pulse Detector</a>
       <blockquote>
       <p> This application uses <a href="https://pjreddie.com/darknet/yolo/">OpenCV</a>  to detect the user's face to isolate the forehead region. Data is collected from this region over time to estimate the user's heart rate by measuring average optical intensity in the forehead location. Physiological data can be estimated this way due to the optical absorption characteristics of (oxy-) haemoglobin <a href="https://www.osapublishing.org/oe/abstract.cfm?uri=oe-16-26-21434"> See Plethysmographic imaging </a>
       </p>
       </blockquote>
       </blockquote>
-      <li><a href="https://github.com/melfm/Idris-dev">Idris, A Dependently Typed Functional Programming Language</a>
+      <li class="projects"><a href="https://github.com/melfm/Idris-dev">Idris, A Dependently Typed Functional Programming Language</a>
       <blockquote>
       <p> I contributed to <a href="https://www.idris-lang.org/">Idris,</a> a general-purpose functional programming language with dependent types. I implemented a  Secure SQL Query system Using Dependent Types.
       </p>

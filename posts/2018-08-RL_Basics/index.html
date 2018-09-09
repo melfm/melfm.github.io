@@ -158,6 +158,25 @@ the future.
 
 </ul>
 
+<h2> Discounted Settings </h2>
+- Discount factor $\gamma \in [0, 1)$, downweights the future rewards
+
+- Since we are adding up $1 + \gamma + \gamma^{2} + ... = \frac{1}{1 - \gamma}$
+
+- Discounted problem can be obtained by adding transitions
+to "sink state" (where agent gets stuck and receives zero
+reward). This condition essentially sets a non-discounted MDP into a discounted MDP
+
+$$
+\widetilde{P}(s' | s, a) =
+    \begin{cases}
+    P(s'| s, a) \quad with \quad probability \quad \gamma \\
+    \textrm{sink state with probability } 1 - \gamma
+    \end{cases}
+$$
+Think of discount factor here as, there is a probability of $1 - \gamma$ that something happens that you don't get
+to the desired state. So the justification here is that the earlier you can obtain the reward the better.
+
 <h2>Definitions</h2>
 one can identify four main subelements
 of a reinforcement learning system: a policy, a reward signal , a value function,

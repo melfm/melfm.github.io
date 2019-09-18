@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta http-equiv="X-UA-Compatible" content="chrome=1">
@@ -25,248 +26,292 @@
   <link rel="stylesheet" href="css/style.css">
   <link href="./css/default_intro.css" rel="stylesheet">
 
-<meta name="viewport" content="width=device-width">
-<style type="text/css">
+  <meta name="viewport" content="width=device-width">
+  <style type="text/css">
+    div.paper {
+      clear: both;
+      margin-top: 0.3em;
+      margin-bottom: 0.3em;
+      < !--border: 1px solid #ddd;
+      -->background: #fff;
+      < !--height: 180px-->
+    }
 
-div.paper {
-  clear: both;
-  margin-top: 0.3em;
-  margin-bottom: 0.3em;
-  <!--border: 1px solid #ddd;-->
-  background: #fff;
-  <!--height: 180px-->
-}
+    div.paper {
+      padding-left: 0px;
+    }
 
-div.paper {
-  padding-left: 0px;
-}
-div.paper div.wide {
-  padding-right:0px;
-}
-img.paper {
-  margin-bottom: 0.5em;
-  margin-right: 1.0em;
-  float: left;
-  width: 160px;
-  height: 120px;
-  max-width: 160px;
-  max-height: 180px;
-}
+    div.paper div.wide {
+      padding-right: 0px;
+    }
 
-div.relative {
-    position: relative;
-    left: 30px;
-}
+    img.paper {
+      margin-bottom: 0.5em;
+      margin-right: 1.0em;
+      float: left;
+      width: 160px;
+      height: 120px;
+      max-width: 160px;
+      max-height: 180px;
+    }
 
-p {
-  font-family: 'Lato', Verdana, Helvetica, sans-serif;
-  font-size: 19px;
-  color: #282828;
-}
+    div.relative {
+      position: relative;
+      left: 30px;
+    }
 
-
-.navbar {
-  overflow: hidden;
-  top: 0;
-  width: 100%;
-}
+    p {
+      font-family: 'Lato', Verdana, Helvetica, sans-serif;
+      font-size: 19px;
+      color: #282828;
+    }
 
 
-li.projects {
-  margin: 40px 0;
-}
+    .navbar {
+      overflow: hidden;
+      top: 0;
+      width: 100%;
+    }
 
-h2 {
-  font-size:20px;
-  font-weight: bold;
-}
 
-pink {
-  color: hotpink;
-}
+    li.projects {
+      margin: 40px 0;
+    }
 
-a:link {
-  font-family: 'Lato', Verdana, Helvetica, sans-serif;
-  color: #1772d0;
-}
-a:visited {
-  color: #1772d0;
-}
+    h2 {
+      font-size: 20px;
+      font-weight: bold;
+    }
 
-</style>
+    pink {
+      color: hotpink;
+    }
+
+    a:link {
+      font-family: 'Lato', Verdana, Helvetica, sans-serif;
+      color: #1772d0;
+    }
+
+    a:visited {
+      color: #1772d0;
+    }
+  </style>
 </head>
 
 <body>
-<div id="wrap">
+  <div id="wrap">
     <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
-        <div class="container">
-            <!--Toggle header for mobile-->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand active" href="./" id="home">Melissa Mozifian</a>
-            </div>
-            <!--normal header-->
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="./about.html"><span class="glyphicon glyphicon-user"></span>  About</a></li>
-                    <li><a href="./index.html"><span class="glyphicon glyphicon-pencil"></span>  ML Blog</a></li>
-                    <li><a href="./contact.html"><span class="glyphicon glyphicon-envelope"></span>  Contact</a></li>
-                </ul>
-            </div><!--/.nav-collapse -->
+      <div class="container">
+        <!--Toggle header for mobile-->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand active" href="./" id="home">Melissa Mozifian</a>
         </div>
+        <!--normal header-->
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="./about.html"><span class="glyphicon glyphicon-user"></span> About</a></li>
+            <li><a href="./index.html"><span class="glyphicon glyphicon-pencil"></span> ML Blog</a></li>
+            <li><a href="./contact.html"><span class="glyphicon glyphicon-envelope"></span> Contact</a></li>
+          </ul>
+        </div>
+        <!--/.nav-collapse -->
+      </div>
     </nav>
-<div class="wrapper">
-  <header>
-    <p> </p>
-    <img src="docs/images/DSC_4216.jpg">
-    <p> </p>
-    </header>
-    <div class="relative">
-      <div>
-        <br>
+    <div class="wrapper">
+      <header>
+        <p> </p>
+        <img src="docs/images/DSC_4216.jpg">
+        <p> </p>
+      </header>
+      <div class="relative">
+        <div>
+          <br>
           <p>
-          I am a researcher at <a href="https://mila.quebec/">Mila</a> and
-          <a href="https://www.mcgill.ca/"> McGill University</a>, where I am co-advised
-            by <a href="https://www.cim.mcgill.ca/~dmeger/"> Prof. David Meger</a> and<a href="https://www.cs.mcgill.ca/~jpineau/"> Prof. Joelle Pineau</a>.
+            I am a researcher at <a href="https://mila.quebec/">Mila</a> and
+            <a href="https://www.mcgill.ca/"> McGill University</a>, where I am co-advised
+            by <a href="https://www.cim.mcgill.ca/~dmeger/"> Prof. David Meger</a> and<a
+              href="https://www.cs.mcgill.ca/~jpineau/"> Prof. Joelle Pineau</a>.
             I was previously part of the
-            <a href="http://wavelab.uwaterloo.ca/">Autonomous Vehicles Lab</a> at the Department of Mechanical and Mechatronics Engineering at the
-            <a href="https://uwaterloo.ca/">Univeristy of Waterloo  </a>supervised by
+            <a href="http://wavelab.uwaterloo.ca/">Autonomous Vehicles Lab</a> at the Department of Mechanical and
+            Mechatronics Engineering at the
+            <a href="https://uwaterloo.ca/">Univeristy of Waterloo </a>supervised by
             <a href="https://scholar.google.ca/citations?user=CwgGTXMAAAAJ"> Prof. Steven Waslander</a>.
           </p>
           <p>
-          I'm interested in designing learning algorithms for robotics applications. My work over the past year has focused on 
-          reinforcement learning, especially related to transfer learning and  imitation learning.
+            I'm interested in designing learning algorithms for robotics applications. My work over the past year has
+            focused on
+            reinforcement learning, especially related to transfer learning and imitation learning.
           </p>
           <p> Contact : melissafm24 at gmail dot com</p>
 
           <p class="view"><a href="docs/cv.pdf" title="CV">[CV] </a> <a href="https://github.com/melfm">[GitHub]</a>
-          <a href="https://scholar.google.com/citations?user=sygJEU0AAAAJ&hl=en">[Google Scholar]</a></p>
+            <a href="https://scholar.google.com/citations?user=sygJEU0AAAAJ&hl=en">[Google Scholar]</a></p>
 
+        </div>
       </div>
-    </div>
-    <section> <!-- Leave empty space here -->
+      <section>
+        <!-- Leave empty space here -->
 
-  <h2> Publications </h2>
-  <div class="panel-body">
-    <!-- Begin of a paper -->
-    <div class="paper">
-      <table>
-        <tr>
-          <td>
-            <img class="paper"  src="docs/images/lsdr_pic.png" />
-          </td>
-          <td class="paper">
-            <a href="https://arxiv.org/abs/1906.00410">
-              <b>Learning Domain Randomization Distributions for Transfer of Locomotion
-              Policies</b><br> </a>
-            <b>Melissa Mozifian<sup>*</sup></b>, Juan Camilo Gamboa Higuera<sup>*</sup>, David Meger, Gregory Dudek<br>
-            <i>Multi-Task and Lifelong Reinforcement Learning Workshop (<b>ICML</b>), 2019</i><br>
-            <a href = "https://github.com/melfm/lsdr" target="_blank"><font><pink>Code coming soon </pink></font></a>/
-            <!--<a href="docs/publications/iros2018.bib"> Bibtex</a> -->
-          </td>
-        </tr>
-        <!-- Begin of a paper -->
-        <tr>
-          <td>
-            <img class="paper"  src="docs/images/detection_sample.png" alt="avod" />
-          </td>
-          <td class="paper">
-          <a href="https://arxiv.org/abs/1712.02294"><b>Joint 3D Proposal Generation and Object Detection from View Aggregation</b> </a></br>
-            Jason Ku, <b>Melissa Mozifian</b>, Ali Harakeh, Jungwook Lee, Steven Waslander</br>
-            <i>International Conference on Intelligent Robots and Systems (<b>IROS</b>), 2018</i></br>
-            <a href = "https://github.com/kujason/avod"> <b><pink>Code</pink></b> </a>/
-            <a href = "http://www.cvlibs.net/datasets/kitti/eval_object.php?obj_benchmark=3d" target="_blank"><font>Kitti Benchmark (AVOD) </font></a>/
-            <a href = "https://youtu.be/Q1f-s6_yHtw"> Paper Video </a>/
-            <a href = "https://youtu.be/M5J65pSkjA8"> More Video</a>/
-            <a href="docs/publications/iros2018.bib"> Bibtex</a>
-          </td>
+        <h2> Publications </h2>
+        <div class="panel-body">
+          <!-- Begin of a paper -->
+          <div class="paper">
+            <table>
+              <tr>
+                <td>
+                  <img class="paper" src="docs/images/lsdr_pic.png" />
+                </td>
+                <td class="paper">
+                  <a href="https://arxiv.org/abs/1906.00410">
+                    <b>Learning Domain Randomization Distributions for Training Robust Locomotion Policies</b><br> </a>
+                  <b>Melissa Mozifian<sup>*</sup></b>, Juan Camilo Gamboa Higuera<sup>*</sup>, David Meger, Gregory
+                  Dudek<br>
+                  <i>Multi-Task and Lifelong Reinforcement Learning Workshop (<b>ICML</b>), 2019</i><br>
+                  <a href="https://github.com/melfm/lsdr" target="_blank">
+                    <a href="https://github.com/melfm/lsdr"> <b>
+                        <pink>Code</pink>
+                      </b>
+                    </a>
+                    <!--<a href="docs/publications/iros2018.bib"> Bibtex</a> -->
+                </td>
+              </tr>
+              <!-- Begin of a paper -->
+              <tr>
+                <td>
+                  <img class="paper" src="docs/images/detection_sample.png" alt="avod" />
+                </td>
+                <td class="paper">
+                  <a href="https://arxiv.org/abs/1712.02294"><b>Joint 3D Proposal Generation and Object Detection from
+                      View Aggregation</b> </a></br>
+                  Jason Ku, <b>Melissa Mozifian</b>, Ali Harakeh, Jungwook Lee, Steven Waslander</br>
+                  <i>International Conference on Intelligent Robots and Systems (<b>IROS</b>), 2018</i></br>
+                  <a href="https://github.com/kujason/avod"> <b>
+                      <pink>Code</pink>
+                    </b> </a>/
+                  <a href="http://www.cvlibs.net/datasets/kitti/eval_object.php?obj_benchmark=3d" target="_blank">
+                    <font>Kitti Benchmark (AVOD) </font>
+                  </a>/
+                  <a href="https://youtu.be/Q1f-s6_yHtw"> Paper Video </a>/
+                  <a href="https://youtu.be/M5J65pSkjA8"> More Video</a>/
+                  <a href="docs/publications/iros2018.bib"> Bibtex</a>
+                </td>
+              </tr>
+          </div>
+          <!-- Begin of a paper -->
+          <tr>
+            <td>
+              <img class="paper" src="docs/images/Pelican.jpg" />
+            </td>
+            <td class="paper">
+              <a href="http://ncfrn.mcgill.ca:8090/NCFRN/en/members/pubs/2017_ICRA_Grey_Box_model.pdf">
+                <b>Deep Learning a Quadrotor Dynamic Model for Multi-Step Prediction</b></br> </a>
+              Nima Mohajerin,<b> Melissa Mozifian</b> and Steven Waslander</br>
+              <i>International Conference on Computer Vision on Robotics and Automation (<b>ICRA</b>), 2018</i></br>
+              <a href="https://github.com/wavelab/pelican_dataset" target="_blank">
+                <font>Quadrotor Dataset </font>
+              </a>/
+              <a href="docs/publications/icra2018.bib"> Bibtex</a>
+              <br />
+              </pre>
+            </td>
           </tr>
+          </table>
+        </div>
     </div>
-        <!-- Begin of a paper -->
-        <tr>
-          <td>
-            <img class="paper"  src="docs/images/Pelican.jpg" />
-          </td>
-          <td class="paper">
-            <a href="http://ncfrn.mcgill.ca:8090/NCFRN/en/members/pubs/2017_ICRA_Grey_Box_model.pdf">
-              <b>Deep Learning a Quadrotor Dynamic Model for Multi-Step Prediction</b></br> </a>
-            Nima Mohajerin,<b> Melissa Mozifian</b> and Steven Waslander</br>
-            <i>International Conference on Computer Vision on Robotics and Automation (<b>ICRA</b>), 2018</i></br>
-            <a href = "https://github.com/wavelab/pelican_dataset" target="_blank"><font>Quadrotor Dataset </font></a>/
-            <a href="docs/publications/icra2018.bib"> Bibtex</a>
-            <br/>
-            </pre>
-          </td>
-          </tr>
-        </table>
-    </div>
-  </div>
 
     <h2> Past Projects </h2>
-      <ul>
+    <ul>
       <li class="projects">
-      <a href="https://uwspace.uwaterloo.ca/handle/10012/13267"> Real-time 3D Object Detection for Autonomous Driving</a>
-      <blockquote>
-        <p> Master thesis. </p>
+        <a href="https://uwspace.uwaterloo.ca/handle/10012/13267"> Real-time 3D Object Detection for Autonomous
+          Driving</a>
         <blockquote>
-        AVOD-SSD <a href="https://github.com/melfm/avod-ssd"> <b><pink>Code</pink></b> </a>
-        </blockquote>
+          <p> Master thesis. </p>
+          <blockquote>
+            AVOD-SSD <a href="https://github.com/melfm/avod-ssd"> <b>
+                <pink>Code</pink>
+              </b> </a>
+          </blockquote>
       </li>
       </blockquote>
-      </ul>
-      <ul>
+    </ul>
+    <ul>
       </blockquote>
       <li class="projects"><a href="http://www.autonomoose.net/"> Autonomoose</a>
-      <blockquote>
-      <p>
-        Worked on deploying our 3D object detector, AVOD, with <a href="http://www.ros.org/">ROS</a> integration on our self-driving car.<a href="https://www.youtube.com/watch?v=gp9Eu50gxO4"> See video </a> </li>
-      <iframe width="460" height="215" src="https://www.youtube.com/embed/Q1f-s6_yHtw" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-      <iframe width="460" height="215" src="https://www.youtube.com/embed/gp9Eu50gxO4" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        <blockquote>
+          <p>
+            Worked on deploying our 3D object detector, AVOD, with <a href="http://www.ros.org/">ROS</a> integration on
+            our self-driving car.<a href="https://www.youtube.com/watch?v=gp9Eu50gxO4"> See video </a>
+      </li>
+      <iframe width="460" height="215" src="https://www.youtube.com/embed/Q1f-s6_yHtw" frameborder="0"
+        allow="autoplay; encrypted-media" allowfullscreen></iframe>
+      <iframe width="460" height="215" src="https://www.youtube.com/embed/gp9Eu50gxO4" frameborder="0"
+        allow="autoplay; encrypted-media" allowfullscreen></iframe>
       </p>
       </blockquote>
       <li class="projects"><a href="https://github.com/melfm/dukecone">Neural Network based EKF Localization</a>
-      <blockquote>
-        <p>  Object-based localization method with neural networks using <a href="https://pjreddie.com/darknet/yolo/">YOLO</a> (real-time object detector) to localize objects in the camera frame. Using these detected objects as features, an Extended Kalman Filter was used to estimate the robot pose.<a href="https://www.youtube.com/watch?v=OcQGvapoJCg"> See video </a>
-      </p>
-      </blockquote>
-      <li class="projects"><a href="https://github.com/melfm/kaggle-seizure-prediction">Kaggle Seizure Prediction Challenge</a>
-      <blockquote>
-      <p> Electrical brain activity (EEG) based seizure forecasting systems using machine learning methods. See the <a href="https://www.kaggle.com/c/melbourne-university-seizure-prediction"> challenge</a>
+        <blockquote>
+          <p> Object-based localization method with neural networks using <a
+              href="https://pjreddie.com/darknet/yolo/">YOLO</a> (real-time object detector) to localize objects in the
+            camera frame. Using these detected objects as features, an Extended Kalman Filter was used to estimate the
+            robot pose.<a href="https://www.youtube.com/watch?v=OcQGvapoJCg"> See video </a>
+          </p>
+        </blockquote>
+      <li class="projects"><a href="https://github.com/melfm/kaggle-seizure-prediction">Kaggle Seizure Prediction
+          Challenge</a>
+        <blockquote>
+          <p> Electrical brain activity (EEG) based seizure forecasting systems using machine learning methods. See the
+            <a href="https://www.kaggle.com/c/melbourne-university-seizure-prediction"> challenge</a>
 
-      </p>
-      </blockquote>
-      </blockquote>
-      <li class="projects"><a href="https://github.com/melfm/ece-course-proj/blob/master/report/modelling-quadrotor-dynamics.pdf">Modelling Quadrotor Dynamics Using Neural Networks</a>
-      <blockquote>
-      <p> Using deep recurrent neural network architecture to model quadrotor dynamics with autoencoders as a pre-training technique.
-      </p>
-      </blockquote>
-      <li class="projects"><a href="https://info.cs.st-andrews.ac.uk/student-handbook/files/project-library/sh/Mozifian.pdf">Affective Mirror (BSc Dissertation - 2014)</a>
-      <blockquote>
-      <p>  The goal of this project was to develop a
+          </p>
+        </blockquote>
+        </blockquote>
+      <li class="projects"><a
+          href="https://github.com/melfm/ece-course-proj/blob/master/report/modelling-quadrotor-dynamics.pdf">Modelling
+          Quadrotor Dynamics Using Neural Networks</a>
+        <blockquote>
+          <p> Using deep recurrent neural network architecture to model quadrotor dynamics with autoencoders as a
+            pre-training technique.
+          </p>
+        </blockquote>
+      <li class="projects"><a
+          href="https://info.cs.st-andrews.ac.uk/student-handbook/files/project-library/sh/Mozifian.pdf">Affective
+          Mirror (BSc Dissertation - 2014)</a>
+        <blockquote>
+          <p> The goal of this project was to develop a
             system with the ability to detect emotions such as happiness,
-            sadness, surprise and excitement by analysing the facial cues using SVMs.<a href="https://www.youtube.com/watch?v=cIABgfEnbGs"> See video </a>
-      </p>
-      <iframe width="560" height="315" src="https://www.youtube.com/embed/cIABgfEnbGs" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-      </blockquote>
+            sadness, surprise and excitement by analysing the facial cues using SVMs.<a
+              href="https://www.youtube.com/watch?v=cIABgfEnbGs"> See video </a>
+          </p>
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/cIABgfEnbGs" frameborder="0"
+            allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </blockquote>
       <li class="projects"><a href="https://github.com/melfm/pulse-detector">Webcam-based Pulse Detector</a>
-      <blockquote>
-      <p> This application uses <a href="https://pjreddie.com/darknet/yolo/">OpenCV</a>  to detect the user's face to isolate the forehead region. Data is collected from this region over time to estimate the user's heart rate by measuring average optical intensity in the forehead location. Physiological data can be estimated this way due to the optical absorption characteristics of (oxy-) haemoglobin <a href="https://www.osapublishing.org/oe/abstract.cfm?uri=oe-16-26-21434"> See Plethysmographic imaging </a>
-      </p>
-      </blockquote>
-      </blockquote>
-      <li class="projects"><a href="https://github.com/melfm/Idris-dev">Idris, A Dependently Typed Functional Programming Language</a>
-      <blockquote>
-      <p> I contributed to <a href="https://www.idris-lang.org/">Idris,</a> a general-purpose functional programming language with dependent types. I implemented a  Secure SQL Query system Using Dependent Types.
-      </p>
-      </blockquote>
+        <blockquote>
+          <p> This application uses <a href="https://pjreddie.com/darknet/yolo/">OpenCV</a> to detect the user's face to
+            isolate the forehead region. Data is collected from this region over time to estimate the user's heart rate
+            by measuring average optical intensity in the forehead location. Physiological data can be estimated this
+            way due to the optical absorption characteristics of (oxy-) haemoglobin <a
+              href="https://www.osapublishing.org/oe/abstract.cfm?uri=oe-16-26-21434"> See Plethysmographic imaging </a>
+          </p>
+        </blockquote>
+        </blockquote>
+      <li class="projects"><a href="https://github.com/melfm/Idris-dev">Idris, A Dependently Typed Functional
+          Programming Language</a>
+        <blockquote>
+          <p> I contributed to <a href="https://www.idris-lang.org/">Idris,</a> a general-purpose functional programming
+            language with dependent types. I implemented a Secure SQL Query system Using Dependent Types.
+          </p>
+        </blockquote>
       </li>
-      </ul>
-  </section>
-</div>
-</body></html>
+    </ul>
+    </section>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Robust Representation in Deep RL -- Melissa Mozifian</title>
+
+    <link rel="stylesheet" href="../../fonts/Serif/cmun-serif.css" />
+    <link rel="stylesheet" href="../../fonts/Serif-Slanted/cmun-serif-slanted.css" />
+
+    <!--BOOTSTRAP-->
+    <link href="../../bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!--mobile first-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--removed html from url but still is html-->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <!--font awesome-->
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+    <!--fonts: allan & cardo-->
+    <link href="http://fonts.googleapis.com/css?family=Droid+Serif" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Droid+Sans" rel="stylesheet" type="text/css">
+
+    <link href="../../css/sticky-footer-navbar.css" rel="stylesheet">
+
+    <link href="../../css/default.css" rel="stylesheet">
+
+    <link href="../../comments/inlineDisqussions.css" rel="stylesheet">
+
+    <!--Highlight-->
+    <link href="../../highlight/styles/github.css" rel="stylesheet">
+
+    <link href="../../favicon.ico" rel="shortcut icon" />
+
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+
+            MathJax.Hub.Config({
+                tex2jax: {
+                    inlineMath: [['$', '$'], ["\\(", "\\)"]],
+                    processEscapes: true
+                }
+            });
+        </script>
+
+    <link href="../../css/monokai-mel.css" rel="stylesheet" type="text/css">
+    <script src="../../js/rainbow-custom.min.js"></script>
+    <script src="../../js/language/generic.js"></script>
+    <script src="../../js/language/python.js"></script>
+
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-49811703-1', 'melfm.github.io');
+        ga('require', 'linkid', 'linkid.js');
+        ga('require', 'displayfeatures');
+        ga('send', 'pageview');
+
+    </script>
+
+</head>
+
+<body>
+    <div id="wrap">
+        <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+            <div class="container">
+                <!--Toggle header for mobile-->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand active" href="../../" style="font-size:20px;">Melissa Mozifian</a>
+                </div>
+                <!--normal header-->
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="../../about.html"><span class="glyphicon glyphicon-user"></span> About</a></li>
+                        <li><a href="../../contact.html"><span class="glyphicon glyphicon-envelope"></span> Contact</a>
+                        </li>
+                    </ul>
+                </div>
+                <!--/.nav-collapse -->
+            </div>
+        </nav>
+
+
+        <div id="content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h1>Robust Representation RL</h1>
+                        <div class="info">
+                            <p style="font-family:CMSS; font-size:120%">Posted Feb 2020 </p>
+
+                        </div>
+                        </br>
+                        <p> How good are our Deep RL agents when trained on high-dimensional state spaces?
+                            Let's try to summarize all the latest work in the domain of vision-based control.
+
+                            Learning from pixel frames is nothing new, it all started with Atari games
+                            and DQN. But in the context of learning control and other tasks, like mujoco or
+                            robot manipulation, it is still hard because even learning long horizon trajectories
+                            from low level control state can be challenging.
+
+                            Atari tasks are also deterministic, so when you press action 'Go right'
+                            you go right. Because there is hidden information in the state of these games,
+                            sometimes these problems are formulated as a POMDP.
+
+                            Learning from high-dimensional data for RL is still a hard problem because we still cannot
+                            match
+                            the performance to that of learning from low level state. This is probably because in the
+                            past
+                            few years, the research has been focused on just getting these RL algorithms to learn useful
+                            behaviours (in a semi-robust manner at least). And less worry was invested towards the fact
+                            that
+                            these RL agents are probably just overfitting to the training environments.
+
+                            Of course the ultimate goal is to understand how brains do this and try to take inspirations
+                            form
+                            there. So its always a nice read, but that's perhaps still too far away.
+
+                            Some nice article about studying the invariance of representation in the human brain, for
+                            example
+                            <a href="https://elifesciences.org/articles/46619">Invariant representations of mass in the
+                                human brain</a> paper. It studies how an intuitive understanding of physics develops
+                            early in the brain, where object's weight can be inferred based on compression of the
+                            material
+                            or stability can be judged based on object's center of mass.
+
+                            <ul>
+                                <li> How robust are our current methods to the changes in representation?
+                                    Do RL agents fail due to small visual changes? </li>
+                                <li> Looking at some existing techniques and trying to figure out which is most useful
+                                    in the context of sim2Real transfer. </li>
+                            </ul>
+
+                            When we talk about generalization in RL, we need to be specific about which characteristic
+                            we are referring to.
+                            We can generalize to $1$) visual changes, $2$) different dynamics, $3$) problem structure
+                            (this can be for instance
+                            defining two tasks that are similar enough and in theory the agent should be able to solve
+                            both, having being trained
+                            on the first only).
+
+                            So what can we do about the visual changes setting ? There are various strategies in the
+                            that help to learn invariant representations.
+
+                            <ul>
+                                <li> Regularization </li>
+                                <li> Data Augmentation such as visual domain randomization.</li>
+                                <li> Random networks </li>
+                            </ul>
+
+                            This means that, RL agents <b>can</b> learn invariant and robust representation if
+                            input observations are diverse enough. But in the context of robotics, we are always going
+                            to be
+                            limited by the physics simulator. And this is the motivation for continuing to develop more
+                            robust strategies to learn good representation under a sample efficiency mindset.
+
+                        </p>
+
+                        <h2 id="planet">Network Randomization</h2>
+                        The main idea is to use a random convolutional network to generate randomized inputs and train
+                        the RL agent on these randomly generated observations. By re-initializing the parameters
+                        of the random network at every <b>iteration</b>, the agents are constrained to be trained
+                        under a broad range of perturbed low-level features.
+
+                        <h3>Random networks for deep RL</h3>
+                        This one is interesting as its slightly different from the general mode of regularization and
+                        data
+                        augmentation and noise injection in general. The paper
+                        <a href="https://arxiv.org/abs/1810.12894">Exploration by Random Network Distillation</a>
+                        explores
+                        the idea of using a randomly initialized network to define an intrisic reward for visiting
+                        unexplored parts of the state. So by learning to predict reward for visiting unexplored
+                        states, the agent recognizes unexplored regions of the state.
+                        Ensemble-based approaches can sometimes help to improve <b>uncertainty</b> estimation
+                        in the context of exploration and recognizing unseen states.
+
+                        Lets say we have a random network $f$ with parameters $\phi$. We take the original input $s$,
+                        randomize it using this network,
+                        $\hat{s} = f(s;\phi)$, then train the agent on this input observation. We expect the agent to
+                        learn
+                        to ignore the noise and learn a robust representation that matters. To enforce this, they use
+                        a feature matching (<b>FM</b>) loss between hidden features from <b>clean</b> and
+                        <b>randomized</b>
+                        observations, defined as a $L2$ norm loss,
+
+                        $\mathcal{L}^{random}_{FM}= \mathbb{E} [|| h(f(s_t;\phi);\theta) - h(s_t; \theta) ||^2] $
+
+
+                        <h3>Removing visual bias</h3>
+                        Usually in Deep Learning, people study the robustness of CNNs for example to changes of
+                        colour, texture, shapes etc. To run experiments for these phenomenons, they take an image
+                        classification dataset such as cats and dogs, where dogs are bright, cats are dark in the
+                        training set, and the other way round, dogs are dark and cats are bright in the test set.
+                        And it has been shown that CNNs are biased towards texture or color, but still do a good
+                        job at shapes and other structures <a href="https://arxiv.org/abs/1811.12231">
+                            ImageNet-trained CNNs are biased towards texture</a>
+                        Methods to solve these issues :
+                        <ul>
+                            <li> Grayout (GR) </li>
+                            <li> cutout </li>
+                            <li> Inversion (IV) </li>
+                            <li> color jitter (CJ)</li>
+                        </ul>
+                        But again these tricks only take you so far.
+
+                        <h2 id="planet">D4PG</h2>
+                        They use a distributional version of critic update. These distributions model the randomness
+                        due to instrinsic factors.
+
+                        <h2 id="planet">PlaNet</h2>
+                        <ul>
+                            <li> Model-Based </li>
+                            <li> Model predicts future images and rewards using a sequence of compact latent states,
+                                trained as a sequential VAE.</li>
+                            <li> Reconstruction error gives a training signal. </li>
+                        </ul>
+                        <p> They learn an encoder $q(s_t | o_{\leq t}, a_{&lt; t})$ to infer an approximate belief over
+                            the current hidden
+                            state from the history using filtering.
+
+                        </p>
+
+
+                        <h2 id="sac-ae">SAC-AE</h2>
+                        <p>
+                            This paper is based on a simple encoder decoder architecture with reconstruction loss as a
+                            training signal.
+                            Is this robust? How different is the learned representation from our object detection
+                            architectures?
+                            Let's take the reacher environment as an example. If I place the goal on the left and train,
+                            then
+                            place the goal to the right at the evaluation phase, can it still solve the task?
+                            If yes, then its definitely looking for the red thing that looks like a goal?
+                            If not, then why not? Is it the representation or the behaviour policy just hasn't
+                            experienced
+                            that part of the state, so its not realistic to expect it to reach there?
+
+                        </p>
+
+
+
+                        <h2 id="slac">SLAC</h2>
+
+
+                        <br style="clear:left;">
+
+                        </section>
+
+                        <div id="disqus_thread"></div>
+
+                        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+                        <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+
+                        <script src="../../comments/inlineDisqussions.js"></script>
+                        <script src="../../js/disqus.js"></script>
+
+                    </div>
+                    <div class="col-md-4"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+
+    <script src="../../bootstrap/js/bootstrap.min.js"></script>
+
+    <script src="../../highlight/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    <script src="../../js/footnotes.js"></script>
+
+    <script src="../../comments/inlineDisqussions.js"></script>
+
+    <noscript>Enable JavaScript for footnotes, Disqus comments, and other cool stuff.</noscript>
+
+</body>
+
+</html>

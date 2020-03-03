@@ -101,21 +101,35 @@
                     <div class="col-md-8">
                         <h1>Robust Representation RL</h1>
                         <div class="info">
-                            <p style="font-family:CMSS; font-size:120%">Posted Feb 2020 </p>
+                            <p style="font-family:CMSS; font-size:120%">Posted March 2020 </p>
 
                         </div>
                         </br>
                         <p> How good are our Deep RL agents when trained on high-dimensional state spaces?
                             Let's try to summarize all the latest work in the domain of vision-based control.
 
+                            Images are a convenient and inexpensive way of acquiring state information, where effective
+                            control requires proprioceptive state of the underlying dynamics.
+
                             Learning from pixel frames is nothing new, it all started with Atari games
                             and DQN. But in the context of learning control and other tasks, like mujoco or
                             robot manipulation, it is still hard because even learning long horizon trajectories
                             from low level control state can be challenging.
+                            Also even though deep convolutional encoders can learn good representations, they still
+                            require large amounts of training data. Existing RL approaches still suffer from poor
+                            sample complexity :(
+
+                            Some impressive progress has been made applying model-free RL to domains with simple
+                            dynamics and discrete action spaces. Extending these methods to complex continuous control
+                            environments has been challenging.
+
+                            Why ? Well various reasons :
 
                             Atari tasks are also deterministic, so when you press action 'Go right'
                             you go right. Because there is hidden information in the state of these games,
                             sometimes these problems are formulated as a POMDP.
+
+                            RL signal is much sparser compared to supervised learning.
 
                             Learning from high-dimensional data for RL is still a hard problem because we still cannot
                             match
@@ -170,7 +184,7 @@
 
                         </p>
 
-                        <h2 id="planet">Network Randomization</h2>
+                        <h2 id="netrando">Network Randomization</h2>
                         The main idea is to use a random convolutional network to generate randomized inputs and train
                         the RL agent on these randomly generated observations. By re-initializing the parameters
                         of the random network at every <b>iteration</b>, the agents are constrained to be trained
@@ -217,11 +231,12 @@
                         </ul>
                         But again these tricks only take you so far.
 
-                        <h2 id="planet">D4PG</h2>
+                        <h2 id="d4pg">D4PG</h2>
                         They use a distributional version of critic update. These distributions model the randomness
                         due to instrinsic factors.
 
                         <h2 id="planet">PlaNet</h2>
+                        (Deep Planning Networks or “PlaNet”)
                         <ul>
                             <li> Model-Based </li>
                             <li> Model predicts future images and rewards using a sequence of compact latent states,
@@ -231,6 +246,33 @@
                         <p> They learn an encoder $q(s_t | o_{\leq t}, a_{&lt; t})$ to infer an approximate belief over
                             the current hidden
                             state from the history using filtering.
+
+                            Learn environment's dynamics directly on the target task. What do they mean by target task?
+                            Learn a transition model and then use it for MPC.
+
+                            Explain MPC
+
+                            PlaNet consists of 3 networks:
+                            <ul>
+
+                                <li>(a) a Variational Autoencoder (VAE) that encodes an image
+                                    observation into a latent
+                                    state; </li>
+
+                                <li>(b) a reward estimator that learns the reward that
+                                    is associated with each latent state;</li>
+
+                                <li>(c) a recurrent
+                                    neural network (RNN) which learns to predict the next latent
+                                    state given the previous one and an action.
+                                </li>
+                            </ul>
+
+                            These components work together to encode a single observation, rolling out multiple
+                            altenative trajectories in latent space without further interactions with the environment.
+
+                            This method is also off-policy because because data is stored in a replay buffer.
+
 
                         </p>
 
@@ -248,6 +290,9 @@
                             If not, then why not? Is it the representation or the behaviour policy just hasn't
                             experienced
                             that part of the state, so its not realistic to expect it to reach there?
+
+                            What is this high-fidelity model that encapsulates strong inductive biases?
+
 
                         </p>
 

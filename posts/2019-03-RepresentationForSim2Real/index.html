@@ -99,51 +99,49 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-8">
-                        <h1>Robust Representation RL</h1>
+                        <h1>Robust Representation in RL</h1>
                         <div class="info">
-                            <p style="font-family:CMSS; font-size:120%">Posted March 2020 </p>
+                            <p style="font-family:CMSS; font-size:120%">Incomplete ideas... </p>
 
                         </div>
                         </br>
                         <p> How good are our Deep RL agents when trained on high-dimensional state spaces?
-                            Let's try to summarize all the latest work in the domain of vision-based control.
 
-                            Images are a convenient and inexpensive way of acquiring state information, where effective
-                            control requires proprioceptive state of the underlying dynamics.
-
-                            Learning from pixel frames is nothing new, it all started with Atari games
+                            Images are a convenient and inexpensive way of acquiring state information as opposed
+                            to proprioceptive state of the underlying dynamics.
+                            <br>
+                            Learning from pixel frames is nothing new, it started with Atari games
                             and DQN. But in the context of learning control and other tasks, like mujoco or
                             robot manipulation, it is still hard because even learning long horizon trajectories
                             from low level control state can be challenging.
                             Also even though deep convolutional encoders can learn good representations, they still
                             require large amounts of training data. Existing RL approaches still suffer from poor
-                            sample complexity :(
-
+                            sample complexity.
+                            <br>
+                            <br>
                             Some impressive progress has been made applying model-free RL to domains with simple
                             dynamics and discrete action spaces. Extending these methods to complex continuous control
                             environments has been challenging.
 
-                            Why ? Well various reasons :
+                            Why? Well various reasons. Atari tasks are deterministic, so when you press action 'Go right'
+                            you go right. This is not the case with environments with more complex dynamics such as 
+                            continuous control of a robot.
 
-                            Atari tasks are also deterministic, so when you press action 'Go right'
-                            you go right. Because there is hidden information in the state of these games,
-                            sometimes these problems are formulated as a POMDP.
+                            <br>
+                            RL signal is much sparser compared to supervised learning. In addition to all of this, an RL policy
+                            now needs to solve two problems: a representation learning problem, and a task learning problem.
 
-                            RL signal is much sparser compared to supervised learning.
 
-                            Learning from high-dimensional data for RL is still a hard problem because we still cannot
+                            Therefore learning from high-dimensional data for RL is still a hard problem because we still cannot
                             match
-                            the performance to that of learning from low level state. This is probably because in the
-                            past
-                            few years, the research has been focused on just getting these RL algorithms to learn useful
-                            behaviours (in a semi-robust manner at least). And less worry was invested towards the fact
-                            that
+                            the performance to that of learning from low level state. So far the research effort has been
+                            focused on getting these RL algorithms to learn useful
+                            behaviours (in a semi-robust manner at least). And care less about the fact that
                             these RL agents are probably just overfitting to the training environments.
 
-                            Of course the ultimate goal is to understand how brains do this and try to take inspirations
-                            form
-                            there. So its always a nice read, but that's perhaps still too far away.
+                            <br>
 
+                            Of course the ultimate goal of RL is to understand how brains do this and try to take inspirations.
                             Some nice article about studying the invariance of representation in the human brain, for
                             example
                             <a href="https://elifesciences.org/articles/46619">Invariant representations of mass in the
@@ -152,35 +150,36 @@
                             material
                             or stability can be judged based on object's center of mass.
 
+                            <br>
+                            <br>
+                            The following paper summaries try to answer some of these questions:
+
                             <ul>
-                                <li> How robust are our current methods to the changes in representation?
-                                    Do RL agents fail due to small visual changes? </li>
-                                <li> Looking at some existing techniques and trying to figure out which is most useful
-                                    in the context of sim2Real transfer. </li>
+                                <li> How robust are our methods to the changes in representation?
+                                     This can be changes in the colour, texture, geometry, symmetry etc </li>
+                                <li> What are some good practical techniques to make representation robust in RL? </li>
                             </ul>
 
                             When we talk about generalization in RL, we need to be specific about which characteristic
                             we are referring to.
                             We can generalize to $1$) visual changes, $2$) different dynamics, $3$) problem structure
-                            (this can be for instance
+                            which can be for instance
                             defining two tasks that are similar enough and in theory the agent should be able to solve
                             both, having being trained
-                            on the first only).
+                            on only one.
 
-                            So what can we do about the visual changes setting ? There are various strategies in the
-                            that help to learn invariant representations.
+                            Let's deal with number $1$, the visual changes setting. There are various strategies that come up
+                            a lot in deep learning, representation learning and domain adaptation specifically,
 
+                            <br>
+                            <br>
                             <ul>
                                 <li> Regularization </li>
                                 <li> Data Augmentation such as visual domain randomization.</li>
                                 <li> Random networks </li>
                             </ul>
 
-                            This means that, RL agents <b>can</b> learn invariant and robust representation if
-                            input observations are diverse enough. But in the context of robotics, we are always going
-                            to be
-                            limited by the physics simulator. And this is the motivation for continuing to develop more
-                            robust strategies to learn good representation under a sample efficiency mindset.
+                            The literature here is huge, let's focus on some latest deep RL papers.
 
                         </p>
 
@@ -232,10 +231,15 @@
                         But again these tricks only take you so far.
 
                         <h2 id="d4pg">D4PG</h2>
+                        This is an off-policy actor-critic algorithm, learning directly from raw images.
                         They use a distributional version of critic update. These distributions model the randomness
                         due to instrinsic factors.
 
                         <h2 id="planet">PlaNet</h2>
+                        Model-based RL method which uses a mixed deterministic/stochastic sequential latent variable
+                        model, but without explicit policy learning. Instead, the mode is used for planning with model
+                        predictive control (MPC) where each plan is optimized with the cross entropy method (CEM).
+                        
                         (Deep Planning Networks or “PlaNet”)
                         <ul>
                             <li> Model-Based </li>
@@ -299,6 +303,9 @@
 
 
                         <h2 id="slac">SLAC</h2>
+
+                        Their architecture learns a latent representation using a stochastic sequential latent variable
+                        model. It's off-policy and model-free.
 
 
                         <br style="clear:left;">

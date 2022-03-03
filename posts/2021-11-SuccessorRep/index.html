@@ -68,6 +68,7 @@
 
     </script>
 
+
 </head>
 
 <body>
@@ -103,16 +104,98 @@
                     <div class="col-md-11">
                         <h1>Successor Representation</h1>
                         <div class="info">
-                            <p style="font-family:CMSS; font-size:120%">Incomplete ... </p>
+                            <p style="font-family:CMSS; font-size:120%"> </p>
 
                         </div>
                         </br>
-                        <p> Successor Representations for RL </p>
-
-
+                        <div class="col s10 text-center">
                         <img class="animated-gif" src="franka_ball_dribble.gif" alt="description of gif"/>
                         <img class="animated-gif" src="franka_ball_hit.gif" alt="description of gif"/> 
                         <img class="animated-gif" src="franka_ball_toss_up.gif" alt="description of gif"/>
+                        </div>
+
+                        <p></p>
+                        <p> In the context of robotics, generalization across tasks is crucial. 
+                            Consider an agent playing ball games with a racket.
+                            An agent trained to dribble the ball vs hitting the ball, should be able to quickly 
+                            learn to play squash, as many of the skills such as approaching and hitting the ball 
+                            are shared in a more complex task of playing squash. From the learners perspective, 
+                            all these tasks share the same common properties, the ball falls to the ground due 
+                            to gravity, depending on heavy it is, and it moves with certain velocity when it is 
+                            hit by the racket. In other words, all these tasks share common dynamics. 
+                            What changes is the small details in the reward function. For instance the difference 
+                            between dribbling a ball vs hitting it against the wall, can be the rotation angle of 
+                            the racket and the amount of force required.
+                        </p>
+
+                        <p>
+
+                            If it was possible to learn a representation that could decouple such discrepancies 
+                            between the reward functions, i.e. decoupling the task dynamics and task-related dynamics, 
+                            one could train an agent that could re-use the learned representation and quickly 
+                            fine-tune itself to the more task-specific representation and achieve a faster learning. 
+
+                        </p>
+
+                        <p>
+                            <a href="https://arxiv.org/abs/1606.05312"><em>Successor features</em> (SF) </a> is one framework that enables such decomposability of representation, explicitly built into the RL formulation. The main goal of this framework is to promote a desired property where instead of being posed as a decoupled representation learning problem, transfer is instead integrated into the RL framework as much as possible, preferably in a way that is almost transparent to the agent.
+                            SFs in theory, enable fast transfer between tasks that differ only in their reward function. The advantage of using an SF framework over model-based RL where one learns models of the reward function, is the ability of dynamics representation re-use
+                            which is decoupled from the task-specific representation.
+
+
+                        </p>
+
+                        <h2>Successor Features Decomposition</h2>
+                        Let $\phi:\mathcal{S} \times \mathcal{A} \times \mathcal{S} \rightarrow \mathbb{R}^d$
+                        be an arbitrary function whose output we will see as "features". 
+                        We assume that there exist features such that the reward function can be written as 
+                        $$r(s,a,s') = \phi(s,a,s')^T$$
+
+                        where $\phi(s,a,s') \in \mathbb{R}^d$ are features of $(s,a,s')$ and $\textbf{w}\in \mathbb{R}^d$ are weights. 
+                        Intuitively we can think of $\phi(s,a,s')$ as salient events that may be desirable or 
+                        undesirable to the agent. We can define an environment 
+                        $M^{\phi}( \mathcal{S} , \mathcal{A}, p, \gamma   )$ as
+
+                        $$    M^{\phi} \equiv \{M (\mathcal{S} , \mathcal{A}, p, r, \gamma   ) | r(s,a,s') = \phi(s, a, s')^T \textbf{w}   \}$$
+
+
+                        SFs make it possible to compute the value of a policy $\pi$ on any task $M_i \in M^{\phi}$ by simply 
+                        plugging in the representation vector $\textbf{w}_i$ defining the task
+
+
+                        <h2>Toy Example</h2>
+
+                        Let's think about a simple 2D goal reaching environment. 
+
+
+                        $$r(\mu, g) = - ||  \mu - g  ||^2 
+                        = || \mu ||^2 + 2g^T \mu - ||g  ||^2$$
+
+                        It is trivial to see the corresponding $\boldsymbol\phi(\mu)$ and $\textbf{w} (g)$ can be recovered as follows,
+
+                        $$
+                        \boldsymbol\phi(\mu) =
+                        \begin{pmatrix}
+                        1 \\
+                        \mu \\
+                        || \mu ||^2 \\
+                        \end{pmatrix} 
+                        ,
+                        \textbf{w} (g) =
+                        \begin{pmatrix}
+                        -|| g ||^2 \\
+                        2g \\
+                        -1 \\
+                        \end{pmatrix}
+                        $$
+
+                        Given such decomposition, we can recover the reward function as the linear combination of $\boldsymbol\phi(\mu)^T \textbf{w}(g)$. 
+                        Such representation, for this particular reacher task, immediately gives a solution to compute $\psi^{\pi}$.
+                        And by changing the target goal location associated with each reacher task, one can create different tasks, 
+                        where the only part of the representation i.e. goal location, changing is $\textbf{w} $, relying on the assumption 
+                        that the representation captures any task-related features. 
+
+                        <h2>Drawbacks of SF Framework</h2>
 
                         <br style="clear:left;">
 
